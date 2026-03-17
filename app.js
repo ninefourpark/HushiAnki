@@ -1244,7 +1244,7 @@ function renderProgressBar() {
         grad: '掌握', 
         due: '即将重逢', 
         tomorrow: '明天再见',
-        upcoming: '3天内再见',
+        upcoming: '后天再见',
         learning: '3天后再见',
         unseen: '没见过'
     };
