@@ -1,0 +1,1153 @@
+
+/* 全局禁止系统默认菜单和选中 */
+* {
+    -webkit-tap-highlight-color: transparent; /* 去除手机点击时的蓝色高亮 */
+    -webkit-touch-callout: none;             /* 禁用 iOS 长按弹出系统菜单 */
+    -webkit-user-select: none;                /* 禁止所有元素的文本选中 */
+    user-select: none;
+}
+
+:root {
+    /* 默认字体变量（按语言分别定义） */
+    --font-card-en: sans-serif;
+    --font-card-ja: sans-serif;
+    --font-card-zh: sans-serif;
+    /*中文回退字体*/
+    --font-fallback-zh: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Source Han Sans CN";
+    --font-fallback-zh-serif: "Source Han Serif SC", "STSong", "SimSun";
+
+    --suit-sb: "1";   /* sentence_builder */
+    --suit-cs: "2";   /* context_sorting  */
+    --suit-ir: "3";   /* intensity_ranking */
+    --suit-dc: "4";   /* dialogue_chain   */
+
+    --suit-sb-color: #1565C0;
+    --suit-cs-color: #cc1111;
+    --suit-ir-color: #FF9800;
+    --suit-dc-color: #4CAF50;
+
+    --mono-font: 
+        "SF Mono", "Monaco", "Menlo", "Consolas", "Roboto Mono", "Ubuntu Mono",
+        "PingFang SC", "Hiragino Sans GB", "Hiragino Kaku Gothic ProN",
+        "Microsoft YaHei", "Meiryo",
+        "Noto Sans CJK SC", "Source Han Sans CN",
+        monospace;
+}
+
+/* 字体映射 */
+
+/* ---------- English fonts ---------- */
+[data-font-en="system-en"] {
+  --font-card-en: system-ui, "Segoe UI", Roboto, "Noto Sans", -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+}
+[data-font-en="roboto"] {
+    --font-card-en: 'Roboto', var(--font-fallback-zh), sans-serif;
+}
+[data-font-en="georgia"] {
+  --font-card-en: 'Georgia', var(--font-fallback-zh), serif;
+}
+[data-font-en="reith"] {
+  --font-card-en: 'BBC Reith Serif', var(--font-fallback-zh), serif;
+}
+[data-font-en="aphont"] {
+  --font-card-en: 'APHont', var(--font-fallback-zh), sans-serif;
+}
+[data-font-en="adhd"] {
+  --font-card-en: 'OpenDyslexic', var(--font-fallback-zh), sans-serif;
+}
+
+/* ---------- Japanese fonts ---------- */
+[data-font-ja="system-ja"] {
+  --font-card-ja: system-ui, "Segoe UI", var(--font-fallback-zh), -apple-system, BlinkMacSystemFont, sans-serif;
+}
+[data-font-ja="yugothic"] {
+  --font-card-ja: 游ゴシック, YuGothic, "Yu Gothic", 游ゴシック, var(--font-fallback-zh), sans-serif;
+}
+[data-font-ja="nhk"] {
+  --font-card-ja: "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", var(--font-fallback-zh), sans-serif;
+}
+[data-font-ja="line"] {
+  --font-card-ja: "LINE Seed JP", var(--font-fallback-zh), sans-serif;
+}
+[data-font-ja="UDPMincho"] {
+  --font-card-ja: 'BIZ UDPMincho', var(--font-fallback-zh-serif), serif;
+}
+
+/* ---------- Chinese fonts ---------- */
+[data-font-ja="system-zh"] {
+  --font-card-en: system-ui, -apple-system, Arial, sans-serif;
+}
+[data-font-zh="sans"] {
+  --font-card-zh:
+    'Source Han Sans',
+    'Noto Sans SC',
+    'Noto Sans TC',
+    'PingFang SC',
+    'Microsoft YaHei',
+    sans-serif;
+}
+
+[data-font-zh="serif"] {
+  --font-card-zh:
+    'Noto Serif SC',
+    'Noto Serif TC',
+    'Songti SC',
+    serif;
+}
+
+[data-font-zh="yozai"] {
+  --font-card-zh:
+    'Yozai',
+    serif;
+}
+
+
+
+html {
+    overflow: hidden;
+}
+
+
+/* 基础重置 */
+body {
+    margin: 0;
+    background-color: #2e7d32; 
+    font-family: sans-serif;
+    overflow: hidden; /* 防止页面滚动 */
+    overscroll-behavior-y: contain; /* 禁止 Chrome 的下拉刷出背景 */
+}
+
+
+.xp-dialog code {
+    font-family: var(--mono-font);
+}
+
+.xp-dialog .code-block {
+    border: 1px solid #5f5f5f;
+    color: #5f5f5f;
+    border-radius: 4px;
+    padding: .8em;
+    margin-block: 1em;
+    overflow-x: auto;
+    position: relative;
+}
+
+#game-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden; /* 防止整个页面滚动 */
+}
+
+.game-title {
+    font-weight: bold;
+    font-size: 14px;
+    padding-left: 8px;
+}
+.game-subtitle {
+    font-weight: normal;
+    font-size: 12px;
+    margin-left: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tool-bar {
+    display: flex;
+    justify-content: space-between;
+    background:#ECE9D8;
+    border-bottom:1px solid #ACA899;
+    color: black;
+}
+
+/* XP 菜单栏 */
+.xp-menubar {
+    display:flex;
+    list-style:none;
+
+    margin:0;
+    padding:2px 6px;
+    font-size:13px;
+}
+
+/* 菜单栏 */
+.xp-menubar > li {
+    position:relative;
+    padding:2px 10px;
+    cursor:default;
+}
+
+.xp-menubar > li:hover {
+    background:#316AC5;
+    color:white;
+}
+
+/* 下拉菜单 */
+.xp-menubar li ul {
+    display:none;
+    position:absolute;
+
+    top:100%;
+    left:0;
+    z-index: 1000;
+
+    list-style:none;
+
+    margin:0;
+    padding:2px;
+
+    background:#F0F0F0;
+    color: #000000;
+    border:1px solid #ACA899;
+    min-width:140px;
+    box-shadow:2px 2px 3px rgba(0,0,0,0.3);
+}
+
+/* hover 展开 */
+.xp-menubar li:hover > ul {
+    display: block;
+}
+
+/* 菜单项 */
+.xp-menubar li ul li {
+    position: relative;
+    padding:4px 30px 4px 20px;
+    white-space:nowrap;
+}
+
+/* hover 项 */
+.xp-menubar li ul li:hover {
+    background:#316AC5;
+    color:white;
+}
+
+/* 键盘打开状态 */
+.xp-menubar > li.menu-open{
+    background:#316AC5;
+    color:white;
+}
+
+.xp-menubar > li.menu-open ul{
+    display:block;
+}
+
+/* 分隔线 */
+.xp-menubar li ul li[role="separator"] {
+    border-top:1px solid #ACA899;
+    margin:4px 2px;
+    padding:0;
+}
+
+
+/* 有子菜单的项目显示右箭头 */
+.xp-menubar li ul li[aria-haspopup="true"]::after {
+    content: "";
+    mask-image: url(menu-right.svg);
+    background: currentColor;
+    mask-size: 4px 7px;
+    mask-repeat: no-repeat;
+    mask-position: center center;
+    position: absolute;
+    right: 8px;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+
+}
+
+.xp-menubar li ul li[aria-haspopup="true"]:hover::after {
+    color: white;
+}
+
+/* 二级菜单默认隐藏、定位到父项右侧 */
+.xp-menubar li ul li ul {
+    display: none;
+    position: absolute;
+    top: -2px;         /* 与父项顶部对齐 */
+    left: 100%;        /* 紧贴父项右边 */
+    z-index: 1001;
+    list-style: none;
+    margin: 0;
+    padding: 2px;
+    background: #F0F0F0;
+    color: #000;
+    border: 1px solid #ACA899;
+    min-width: 140px;
+    box-shadow: 2px 2px 3px rgba(0,0,0,0.3);
+}
+
+/* hover 父项时展开二级菜单 */
+.xp-menubar li ul li[aria-haspopup="true"]:hover > ul {
+    display: block;
+}
+
+.menu-item-desc {
+    font-size: 10px;
+    opacity: 0.5; 
+    margin-top: 1px;
+    font-weight: normal;
+    pointer-events: none;
+}
+
+.xp-menubar li ul li[role="separator-text"] {
+    padding:4px 0 2px 12px;
+    font-size:11px;
+    color:#888;
+    cursor:default;
+}
+.xp-menubar li ul li[role="separator-text"]:hover {
+    background:#F0F0F0;
+}
+
+
+
+#title-bar {
+    position: sticky;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+    overflow-y: auto;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    cursor: default;
+    user-select: none;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.hidden {
+    display: none;
+}
+
+
+/* 牌桌布局：4列 */
+.board {
+    display: flex;
+    padding: 10px;
+    gap: 10px;
+    flex: 1;
+
+    overflow-x: hidden; /* 锁定水平溢出 */
+    overflow-y: auto; /* 只有牌桌内部可以上下滚动 */
+    align-items: flex-start; /* 确保卡片从顶部开始排 */
+    padding-bottom: 120px; 
+    /* 增加底部内边距，确保最底下的牌不被发牌堆遮挡 */
+}
+
+.column {
+    flex: 1;
+    min-width: 0; /* 防止内容撑开 */
+}
+
+.sortable-list {
+    min-height: 500px; /* 确保即使没牌，也有很大的感应区 */
+    height: 100%;
+    position: relative; /* 确保 z-index 生效 */
+    padding-bottom: 300px; /* 增加底部判定区域，方便用户把牌甩在最下方 */
+}
+
+/* 强制在拖拽结束后清理状态 */
+.sortable-list .card {
+    -webkit-tap-highlight-color: transparent; /* 移除移动端点击高亮 */
+    touch-action: none; /* 禁用系统默认手势，防止干扰 */
+}
+
+
+
+/* 卡片样式 */
+.card {
+    background: white;
+    border-radius: 6px;
+    height: 160px; /* 固定高度，只露出顶部 */
+    border: 1px solid #0c0c0c;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    position: relative;
+    display: flex;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-top: -100px; 
+    /* 向上偏移，盖住上一张牌的一部分 */
+    transform-style: preserve-3d;
+    touch-action: none; 
+    /* 防止手机端拖拽时 页面跟着滚 */
+
+    user-select: none;
+    /* 确保即使在拖动时也不会触发选择 */
+    -webkit-user-select: none;
+    
+    will-change: transform;
+    /* 让浏览器知道这个元素会频繁变动位置 */
+    
+    -webkit-touch-callout: none;
+    /* 防止手机端长按卡片触发“存储图片”或“拷贝文本” */
+}
+
+/* 只给发牌或自动对齐等特定场景加动画 */
+.card:not(.sortable-chosen):not(.sortable-drag) {
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+/* 第一张卡片不需要偏移 */
+.card:first-child {
+    margin-top: 0;
+}
+
+/* 文本放在卡片最上方 */
+.card-text {
+    font-family: var(--font-card-en); 
+    /* 默认英文，JS 根据 lang 动态覆盖 */
+    display:flex;
+    font-size: 18px;
+    letter-spacing: 0.04em;
+    word-spacing:0.05em;
+    line-height: 1.2;
+
+    font-weight: 600;
+    color: #333;
+    text-align: left;
+    padding-right: 20px; 
+    width: 100%; /* 充满容器 */
+
+    -webkit-font-smoothing: antialiased;
+    
+    word-break: normal;           
+    /* 英文按单词边界换行 */
+    overflow-wrap: break-word;    
+    /* 只有单个词实在太长才截断，作为最后手段 */
+    hyphens: auto;           
+    /* 按音节自动加连字符，需要 lang 属性 */
+    -webkit-hyphens: auto;   
+    /* Safari/iOS 需要前缀 */
+}
+
+/* 按 lang 属性选择对应变量 */
+.card-text[lang="en"] { font-family: var(--font-card-en); }
+.card-text[lang="ja"] { font-family: var(--font-card-ja); }
+.card-text[lang="zh"] { font-family: var(--font-card-zh); }
+
+
+/* 最后一张卡片（展开态） */
+.card:last-child {
+    height: auto;
+    min-height: 160px;
+    padding-bottom: 20px;
+}
+
+/* 1. 正在被鼠标抓着的那张牌 (顶梁柱) */
+.sortable-drag {
+   /*  z-index: 10000 !important;*/
+   /*  background: white !important;*/
+
+   /* 隐藏原始镜像，因为我们已经有自定义的 stack 了 */
+    opacity: 0 !important; 
+}
+.sortable-drag .card-text {
+    visibility: hidden; /* 隐藏主卡片的文字，由 stack 里的克隆体显示 */
+}
+
+/* 2. 被“捆绑”一起走的牌 (留在原处的视觉反馈) */
+/* 确保 bundled 卡片在拖拽时绝对不可见 */
+.is-bundled {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+    transition: none !important; /* 强制禁用动画 */
+}
+
+/* 3. 在目标位置出现的占位符 (虚影) */
+.sortable-ghost{
+    height:160px !important;
+    transition: opacity 0s; /* 不要让 ghost 有淡出，立即消失 */
+}
+
+/* 4. 消除选中时的硬边缘，增加流畅感 */
+.sortable-chosen {
+    cursor: grabbing;
+    position: relative;
+    outline: 3px solid #F9B435;
+    transition: outline 0s;
+}
+
+/* 正在被鼠标拖拽着的卡牌组 */
+.drag-stack {
+    /* .drag-stack（拖拽时的卡牌堆）被定位在 position: absolute 的时候，如果用户向右拖动卡牌时超出了视口，而 body 和 #game-container 虽然设置了 overflow: hidden，但拖拽元素是用 JS 动态挂载并通过 position: fixed / absolute 移动的，这会触发浏览器重新计算文档宽度，导致滚动条和视口之间会出现一条空隙 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    pointer-events: none;
+    z-index: 2;
+    /* 删掉 inset: 0，改用明确的 top/left/width */
+    
+    /* 强制让 stack 的内容显示，不受父级透明度影响 */
+    opacity: 1 !important; 
+    visibility: visible !important;
+}
+
+/* 被“捆绑”一起走的牌(在被鼠标拖拽着的卡牌组中)  */
+.drag-clone {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;  
+}
+
+.sortable-chosen {
+    outline: 3px solid #F9B435;
+    transition: outline 0s;
+}
+
+/* 发牌堆样式 */
+#deck-container {
+    position: fixed;
+    bottom: 30px;
+    right: 50px;
+    z-index: 100;
+}
+
+.deck-pile {
+    position: relative;
+    width: 100px;
+    height: 140px;
+    cursor: pointer;
+    /* 留出叠牌偏移的空间 */
+    margin-right: 6px;
+    margin-bottom: 6px;
+}
+
+.deck-pile:active {
+    transform: scale(0.95);
+    transition: transform 0.1s;
+}
+
+.deck-count {
+    position: absolute;
+    bottom: 8px;
+    right: 10px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 18px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+
+/* 三张叠放的牌，共用基础样式 */
+.deck-card {
+    position: absolute;
+    width: 100px;
+    height: 140px;
+    border-radius: 6px;
+}
+
+/* 最底层  */
+.deck-card--back  { top: 0; left: 16px;}
+/* 中间层  */
+.deck-card--mid   { top: 0; left: 8px;}
+/* 最顶层 */
+.deck-card--top   { top: 0;   left: 0;   }
+
+/* 飞行中的卡片基础样式 */
+.flying-card {
+    position: fixed;
+    z-index: 9999;
+    border-radius: 6px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    pointer-events: none; /* 动画时不可点击 */
+    transition: left 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+                top  0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+
+/* ----- 花色 ----- */
+.board.show-hints .card::after {
+    position: absolute;
+    top: 6px; /* 稍微下移，给厚边框留位置 */
+    right: 8px;
+    width: 22px; 
+    height: 22px;
+    content: "";
+    pointer-events: none;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+
+.board.show-hints .card[data-category="sentence_builder"]::after  { content: var(--suit-sb); color: var(--suit-sb-color); }
+.board.show-hints .card[data-category="context_sorting"]::after   { content: var(--suit-cs); color: var(--suit-cs-color); }
+.board.show-hints .card[data-category="intensity_ranking"]::after { content: var(--suit-ir); color: var(--suit-ir-color); }
+.board.show-hints .card[data-category="dialogue_chain"]::after    { content: var(--suit-dc); color: var(--suit-dc-color); }
+
+
+/* ----------------- 彩色几何 ----------------- */
+[data-suit-theme="shapes"] .board.show-hints .card[data-category="sentence_builder"]::after {
+    content: "";
+    width: 1.3em;
+    height: 1.3em;
+    background-color: #1565C0;
+    mask-image: url('suits/shapes-round.svg');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    /* 覆盖掉上面的 color，改用 background-color 上色 */
+}
+[data-suit-theme="shapes"] .board.show-hints .card[data-category="context_sorting"]::after {
+    content: "";
+    width: 1.3em;
+    height: 1.3em;
+    background-color: #cc1111;
+    mask-image: url('suits/shapes-heart.svg');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+}
+[data-suit-theme="shapes"] .board.show-hints .card[data-category="intensity_ranking"]::after {
+    content: "";
+    width: 1.3em;
+    height: 1.3em;
+    background-color: #FF9800;
+    mask-image: url('suits/shapes-triangle.svg');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+}
+[data-suit-theme="shapes"] .board.show-hints .card[data-category="dialogue_chain"]::after {
+    content: "";
+    width: 1.3em;
+    height: 1.3em;
+    background-color: #4CAF50;
+    mask-image: url('suits/shapes-star.svg');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+}
+
+
+/*  ----------------- 经典纸牌 ----------------- */
+[data-suit-theme="playing-cards"] .board.show-hints .card[data-category="sentence_builder"]::after {
+    content: "";
+    width: 1.3em;
+    height: 1.3em;
+    background-color: #111111;
+    mask-image: url('suits/playing-cards-club.svg');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    /* 覆盖掉上面的 color，改用 background-color 上色 */
+}
+[data-suit-theme="playing-cards"] .board.show-hints .card[data-category="context_sorting"]::after {
+    content: "";
+    width: 1.3em;
+    height: 1.3em;
+    background-color: #cc1111;
+    mask-image: url('suits/playing-cards-heart.svg');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+}
+[data-suit-theme="playing-cards"] .board.show-hints .card[data-category="intensity_ranking"]::after {
+    content: "";
+    width: 1.3em;
+    height: 1.3em;
+    background-color: #cc1111;
+    mask-image: url('suits/playing-cards-diamond.svg');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+}
+[data-suit-theme="playing-cards"] .board.show-hints .card[data-category="dialogue_chain"]::after {
+    content: "";
+    width: 1.3em;
+    height: 1.3em;
+    background-color: #111111;
+    mask-image: url('suits/playing-cards-spade.svg');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+}
+
+/*  ----------------- 蜘蛛语法符号 -----------------  */
+[data-suit-theme="math"] .board.show-hints .card[data-category="sentence_builder"]::after {
+    content: "";
+    width: 1.3em;
+    height: 1.3em;
+    background-color: #1565C0;
+    mask-image: url('suits/math-plus.svg');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    /* 覆盖掉上面的 color，改用 background-color 上色 */
+}
+[data-suit-theme="math"] .board.show-hints .card[data-category="context_sorting"]::after {
+    content: "";
+    width: 1.3em;
+    height: 1.3em;
+    background-color: #cc1111;
+    mask-image: url('suits/math-comma.svg');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+}
+[data-suit-theme="math"] .board.show-hints .card[data-category="intensity_ranking"]::after {
+    content: "";
+    width: 1.3em;
+    height: 1.3em;
+    background-color: #FF9800;
+    mask-image: url('suits/math-greater.svg');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+}
+[data-suit-theme="math"] .board.show-hints .card[data-category="dialogue_chain"]::after {
+    content: "";
+    width: 1.3em;
+    height: 1.3em;
+    background-color: #4CAF50;
+    mask-image: url('suits/math-slash.svg');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+}
+
+
+
+/* 根卡牌的标记 */
+.card-badge {
+    position: absolute;
+    top: 35px;
+    right: 5px;
+    color: #000;
+    font-size: 12px;
+    padding: 1px 4px;
+    border-radius: 4px;
+    text-align: left;
+}
+
+#win-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none; /* 隐藏时鼠标穿透，不挡着下面的牌 */
+    transition: opacity .4s;
+    z-index: 10001;
+    flex-direction: column;
+    opacity:0;
+}
+
+#win-overlay.show{
+    opacity:1;
+    pointer-events:auto;
+}
+
+.win-panel{
+    animation:winPop .4s ease;
+}
+
+/* 适配 XP 边框样式 */
+.xp-dialog {
+    background: #ECE9D8;
+    border: 2px solid #003DDC;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+
+
+    /* 通过 margin-top 锁定顶端距离屏幕边缘的位置 */
+    margin-top: 50px;
+    /* 给一个最小宽度或最大高度，防止极端情况 */
+    min-width: 400px;
+    max-height: calc(100vh - 100px); 
+    display: flex;
+    flex-direction: column;
+}
+
+.xp-title-bar {
+    background: linear-gradient(90deg, #003DDC, transparent 5px), linear-gradient(270deg, rgba(0, 14, 125, 0.5), transparent 5px), linear-gradient(180deg, #3D95FF 0%, #3D95FF 5%, #0054E3 10%, #0372FF 84%, #026AFE 90%, #0144D0 97%, #0144D0 100%);
+    color: #FFFFFF;
+    border-top-color: #0058EB;
+    border-left-color: #001ABC;
+
+    display: flex;
+    flex-direction: row;
+    font-weight: bold;
+    border-top: 1px solid #688DE0;
+}
+
+.xp-title-bar-text {
+    text-align: left;
+    font-weight: bold;
+    padding: 7px 6px 4px;
+    flex-grow: 1;
+    cursor: default;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.dialog-body {
+    background: var(--window-bg, #ECE9D8); /* 加上 XP 经典的灰黄色 */
+    color: var(--window-fg, #000);
+    overflow-y: auto;
+    flex: 1;
+}
+.padding {
+    padding: 8px;
+}
+
+.flex-row.justify-end {
+    justify-content: flex-end;
+}
+.flex-row.gap {
+    gap: 8px;
+}
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+
+.dialog-body button {
+  background: linear-gradient(180deg, #ffffff 0%, #F0F0EA 100%);
+  color: #000;
+  border: 1px solid #003C74;
+  border-radius: 4px;
+  padding: 2px 16px 3px;
+  box-shadow: -1px -1px 0 #E2DED4, 1px 1px 0 #FBFAF8, inset -1px -2px 1px #D6D0C5;
+  text-align: center;
+  line-height: 1;
+  position: relative;
+  min-width: 90px;
+  cursor: default;
+  user-select: none;
+}
+.dialog-body button::after {
+  content: "";
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 3px;
+}
+
+.dialog-body button:focus {
+  outline: none;
+}
+
+.dialog-body button:not(:disabled, .disabled):hover::after {
+  display: block;
+  border: 2px solid rgba(245, 192, 93, 0.6980392157);
+}
+.dialog-body button:focus-visible::after {
+  outline: 1px dotted #563A2E;
+  outline-offset: -2px;
+}
+.dialog-body button:not(:disabled, .disabled):active {
+  background: #E2E1D9;
+  box-shadow: inset 1px 2px 1px #D1CCC1, inset 0 -1px 1px #fff;
+}
+.dialog-body button:not(:disabled, .disabled):active::after {
+  display: none;
+}
+
+
+.title-bar-buttons {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  padding: 5px 5px 3px 5px;
+  align-items: center;
+}
+
+.title-bar-buttons button {
+  flex-shrink: 0;
+  width: 21px;
+  height: 21px;
+  min-width: 0;
+  padding: 0;
+  background-repeat: no-repeat;
+  background-position: 3px 3px;
+  border: 1px solid #fff;
+  box-shadow: none;
+  margin-left: 2px;
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1), inset -2px -2px 2px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.title-bar-buttons button:hover {
+  filter: brightness(1.2);
+}
+
+.title-bar-buttons button:hover {
+  filter: brightness(1.2);
+}
+.title-bar-buttons button, .title-bar-buttons button:active {
+  background: linear-gradient(135deg, #BFD1FC 0%, transparent 20%), linear-gradient(90deg, #5E8BF7 0%, transparent 40%), linear-gradient(180deg, #5E8BF7 0%, transparent 30%), linear-gradient(to bottom right, #467EF5, #0760F3);
+}
+.title-bar-buttons button:active {
+  outline: none;
+  filter: brightness(0.8);
+  box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.8);
+}
+.title-bar-buttons button::after {
+  display: none;
+  position: initial;
+}
+
+.title-bar-buttons button[data-close] {
+  background: linear-gradient(135deg, #EFA390 0%, transparent 20%), linear-gradient(90deg, #E98168 0%, transparent 40%), linear-gradient(180deg, #E98168 0%, transparent 30%), linear-gradient(to bottom right, #E66A4D, #E03802);
+}
+
+.title-bar-buttons button[data-close]::after,
+.title-bar-buttons button[data-minimize]::after,
+.title-bar-buttons button[data-maximize]::after,
+.maximized .title-bar-buttons button[data-maximize]::after {
+  display: block;
+  content: "";
+  width: 11px;
+  height: 11px;
+  border: 0;
+  outline: none;
+  margin: auto;
+  background: white;
+  border-radius: 0;
+}
+
+.title-bar-buttons button[data-close]::after {
+  -webkit-mask-image: url(img/close.svg);
+  mask-image: url(img/close.svg);
+}
+
+.title-bar-buttons button[data-minimize]::after {
+  -webkit-mask-image: url(img/minimize.svg);
+  mask-image: url(img/minimize.svg);
+}
+
+.title-bar-buttons button[data-maximize]::after {
+  -webkit-mask-image: url(img/maximize.svg);
+  mask-image: url(img/maximize.svg);
+}
+
+
+
+/* ── 关于弹窗 ── */
+.about-dialog {
+    width: min(560px, 92vw);
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.about-body {
+    overflow-y: auto;
+    flex: 1;
+    background: #ECE9D8;
+    padding: 8px;
+}
+
+.about-tabs {
+    display: flex;
+}
+
+.about-tabs > menu {
+    display: flex;
+    flex-direction: row;
+    margin: 0 2px;
+    gap: 1px;
+    padding-inline-start: 0px;
+}
+
+.about-tabs > menu > button {
+  border-bottom: 0;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-color: #91A7B4;
+  background: linear-gradient(to bottom right, #fff, #EFEEE8);
+  box-shadow: inset -1px -1px 0 #ECEBE6;
+  min-width: 0;
+  padding: 4px 10px 4px 10px;
+}
+.about-tabs > menu > button:hover {
+  border-top: 1px solid #E68B2C;
+  box-shadow: inset 0 2px 0 #FFC73C;
+}
+.about-tabs > menu > button:hover::after {
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+.about-tabs > menu > button:focus, .about-tabs > menu > button:active {
+  outline: none;
+}
+.about-tabs > menu > button::after {
+  display: none;
+}
+.about-tabs > menu > button:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -3px;
+}
+.about-tabs > menu > button[class="about-tab active"] {
+  background: #FCFCFE;
+  border-right: 1px solid #919B9C;
+  border-top: 1px solid #E68B2C;
+  border-left: 1px solid #919B9C;
+  box-shadow: inset 0 2px 0 #FFC73C;
+  margin-right: -2px;
+  margin-left: -2px;
+  margin-top: -2px;
+  margin-bottom: -1px;
+  padding: 2px 12px 6px 12px;
+  z-index: 1;
+}
+
+.about-body > [role=tabpanel] {
+  padding: 8px;
+  background: linear-gradient(180deg, #FCFCFE 0%, #F4F3EE 100%);
+  border: 1px solid #919B9C;
+  box-shadow: inset -1px -1px 0 #FCFCFE, 1px 1px 0 #D0CEBF, 2px 2px 0 #E3E0D0;
+}
+
+
+.about-section {
+    margin-bottom: 20px;
+    padding: 8px;
+    line-height: 1.8;
+}
+
+.about-section-title {
+    font-size: 0.95em;
+    font-weight: bold;
+    color: #918d7f;
+    border-bottom: 1px solid #ACA899;
+    padding-bottom: 3px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.about-body p,
+.about-body li {
+    font-size: 0.9em;
+    color: #222;
+    margin-block: 0;
+}
+
+.about-body ul {
+    padding-inline-start: 1em;
+    margin-block: 0.8em;
+}
+
+.about-card-type {
+    font-size: 0.9em;
+    display: flex;
+    align-items:flex-start;
+    gap: 10px;
+}
+
+.about-suit {
+    font-size: 1em;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.about-suit.sentence_builder  { color: #2196F3; }
+.about-suit.context_sorting   { color: #cc1111; }
+.about-suit.dialogue_chain    { color: #4CAF50; }
+.about-suit.intensity_ranking { color: #FF9800; }
+
+/* 帮助图片 */
+.about-img-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+
+.about-img {
+    width: calc(50% - 4px);
+    border: 1px solid #ACA899;
+    width: 100%;
+    border-radius: 3px;
+    cursor: zoom-in;
+    transition: opacity 0.1s;
+}
+
+.about-img:hover { opacity: 0.85; }
+
+/* FAQ */
+#tab-showcase .faq-item,
+#tab-faq .faq-item {
+    border-bottom: 1px solid #C8C4B0;
+    padding: 8px;
+}
+
+#tab-showcase .faq-body,
+#tab-faq .faq-body {
+    line-height: 1.6;
+    color: #333;
+    padding: 8px 8px 16px 24px;
+}
+
+/* ── 图片灯箱 ── */
+.lightbox-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.82);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+}
+
+.lightbox-overlay.show { display: flex; }
+
+.lightbox-img {
+    max-width: 90vw;
+    max-height: 88vh;
+    border-radius: 4px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+    object-fit: contain;
+}
+
+
+
+
+
+
+
+/*卡牌散落动画*/
+.win-card {
+    position: fixed; /* 改为 fixed 确保在最上层 */
+    top: -150px;    /* 从屏幕外开始 */
+    width: 70px;
+    height: 100px;
+    background: white;
+    border: 1px solid #333;
+    border-radius: 5px;
+    box-shadow: 2px 4px 10px rgba(0,0,0,0.3);
+    z-index: 9999;
+    pointer-events: none;
+}
+
+@keyframes winPop{
+    from{transform:scale(.6);opacity:0;}
+    to{transform:scale(1);opacity:1;}
+}
+
+@keyframes winCardFall {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    100% {
+        /* 掉落到屏幕下方，并应用 JS 传入的随机位移和旋转 */
+        transform: translateY(120vh) translateX(var(--drift)) rotate(var(--rotate));
+        opacity: 1;
+    }
+}
+

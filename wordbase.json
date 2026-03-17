@@ -1,0 +1,249 @@
+{
+  "levels": [
+    {
+      "level_id": 1,
+      "level_name": "Lv.1 找出同类词 & 连词成句",
+      "unlocked_types": ["sentence_builder", "context_sorting"],
+      "categories": {
+
+        "sentence_builder": [
+          {
+            "id": "s3-02",
+            "content": ["She speaks three languages", "but still orders coffee", "by pointing at the menu."]
+          },
+          {
+            "id": "d5b2e789",
+            "content": ["I need to make", "a reservation for", "two at seven."]
+          },
+          {
+              "id": "i9j0k1l2",
+              "content": ["Do you know", "how to get to", "the nearest subway station?"]
+          },
+          {
+            "id": "b7e4d023",
+            "content": ["Could you please", "stop hitting the back of", " my seat?"]
+          },
+          {
+            "id": "e9c1b2d4",
+            "content": ["I am professional", "at pretending to understand", "what you just said."]
+          },
+          {
+            "id": "y5z6a7b8",
+            "content": ["Is there any", "discount if I", "pay with cash?"]
+          }
+        ],
+        "context_sorting": [
+          {
+            "id": "c7a053f9",
+            "group_name": "Rainy day",
+            "content": ["umbrella", "raincoat", "thunder", "puddle"]
+          },
+          {
+            "id": "19f4b6e0",
+            "group_name": "Bakery",
+            "content": ["cupcake", "muffin", "scone", "cinnamon roll"]
+          },
+          {
+            "id": "CS-01",
+            "group_name": "Clothes",
+            "content": ["shirt", "socks", "jacket", "jeans"]
+          },
+          {
+            "id": "CS-02",
+            "group_name": "On the street",
+            "content": ["traffic light", "crosswalk", "sidewalk", "bus stop"]
+          },
+          {
+            "id": "CS-03",
+            "group_name": "In the kitchen",
+            "content": ["knife", "pan", "fridge", "microwave"]
+          },
+          {
+            "id": "CS-04",
+            "group_name": "How does it taste?",
+            "content": ["spicy", "sour", "sweet", "salty"]
+          },
+          {
+            "id": "CS-05",
+            "group_name": "Digital Devices",
+            "content": ["smartphone", "laptop", "headphones", "camera"]
+          },
+          {
+              "id": "CS-06",
+              "group_name": "What pets do",
+              "content": ["barking", "purring", "wagging tail", "napping"]
+          },
+          {
+              "id": "CS-07",
+              "group_name": "Good for the planet",
+              "content": ["recycling", "saving energy", "planting trees", "using cloth bags"]
+          }
+        ]
+      }
+    },
+    {
+      "level_id": 2,
+      "level_name": "Lv.2 解锁“对话链”卡牌",
+      "unlocked_types": ["sentence_builder", "context_sorting", "dialogue_chain"],
+      "categories": {
+        "sentence_builder": [
+          {
+              "id": "d1c6e849",
+              "content": ["The annual film festival", "will be held in", "the historic city center."]
+          },
+          {
+            "id": "sb2-04",
+            "content": ["The flight was delayed,", "so she read", "the entire in-flight magazine."]
+          },
+          {
+            "id": "sb2-05",
+            "content": ["He said he'd be", "five minutes late,", "forty minutes ago."]
+          }
+        ],
+        "context_sorting": [
+          {
+            "id": "d47e10a9",
+            "group_name": "Online shopping",
+            "content": ["Add to cart", "Promo code", "Estimated delivery", "Return policy"]
+          },
+          {
+            "id": "e9b2f8a1",
+            "group_name": "Renting a place",
+            "content": ["Security deposit", "Utilities included", "Lease agreement", "Maintenance request"]
+          },
+          {
+            "id": "g4h9i2j5",
+            "group_name": "Coffee shop order",
+            "content": ["Oat milk", "Extra shot", "To go", "For here"]
+          }
+        ],
+        "dialogue_chain": [
+          {
+            "id": "b6d038f5",
+            "content": [
+              "Hi, welcome! Can I start you off with a drink?",
+              "Just water, please.",
+              "Still or sparkling? We only have tap, but I like to ask."
+            ]
+          },
+          {
+            "id": "dc3-01",
+            "content": [
+              "I think I left my umbrella here last Tuesday.",
+              "Can you describe it?",
+              "Black. Foldable. Has a tiny duck on the handle.",
+              "We actually have three of those. Which duck?"
+            ]
+          },
+          {
+            "id": "5fa7c291",
+            "content": [
+              "Are you ready to order?",
+              "I think I need another minute.",
+              "Take your time. I'll just stand here looking busy."
+            ]
+          },
+          {
+            "id": "17ac6e04",
+            "content": [
+              "How's everything tasting?",
+              "Honestly? Better than I expected.",
+              "We'll take that as a five-star review."
+            ]
+          },
+          {
+            "id": "c82b50f9",
+            "content": [
+              "Could I get the check, please?",
+              "Of course! Cash or card?",
+              "Card. And maybe a hug. This week has been rough."
+            ]
+          },
+          {
+            "id": "dc2-05",
+            "content": [
+              "Is this your first time here?",
+              "Yes, a friend recommended it.",
+              "Good friend. You should keep them."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "level_id": 3,
+      "level_name": "Lv.3 解锁“程度排序”卡牌",
+      "unlocked_types": ["sentence_builder", "context_sorting", "dialogue_chain", "intensity_ranking"],
+      "categories": {
+        "sentence_builder": [
+          {
+            "id": "s3-01",
+            "content": ["I would have called", "but I lost", "my charger again."]
+          },
+          {
+            "id": "s3-04",
+            "content": ["He moved abroad", "mainly for the food", "and slightly for love."]
+          }
+        ],
+        "context_sorting": [
+          {
+            "id": "cs3-02",
+            "group_name": "Moving Out",
+            "content": ["packing tape", "moving truck", "security deposit", "change of address"]
+          },
+          {
+            "id": "cs3-03",
+            "group_name": "Doctor's Visit",
+            "content": ["prescription", "waiting room", "blood test", "follow-up appointment"]
+          }
+        ],
+        "dialogue_chain": [
+          {
+            "id": "9db2f641",
+            "content": [
+              "Where do you see yourself in five years?",
+              "Running a place like this. But warmer. And with better bread.",
+              "The bread is Michelin-rated.",
+              "Then warmer. Definitely warmer."
+            ]
+          },
+          {
+            "id": "dc3-02",
+            "content": [
+              "Excuse me, is this seat taken?",
+              "No, go ahead.",
+              "Thanks. Long day?",
+              "Is it that obvious?"
+            ]
+          }
+        ],
+        "intensity_ranking": [
+          {
+            "id": "f4d7b345",
+            "content": ["Warm", "Hot", "Boiling", "Scorching"]
+          },
+          {
+            "id": "h9a1d901",
+            "content": ["Drizzle", "Rain", "Downpour", "Flash flood"]
+          },
+          {
+            "id": "o3p4q5r6",
+            "content": ["Maybe", "Probably", "Definitely"]
+          },
+          {
+            "id": "ir3-06",
+            "content": ["Unhappy", "Upset", "Furious"]
+          },
+          {
+            "id": "ir3-07",
+            "content": ["A bit cold", "Chilly", "Freezing"]
+          },
+          {
+            "id": "ir3-08",
+            "content": ["Crowded", "Packed", "Sardine can", "No one is breathing"]
+          }
+        ]
+      }
+    }
+  ]
+}

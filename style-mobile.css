@@ -1,0 +1,308 @@
+/* ==============================================
+   汉堡菜单按钮（默认隐藏，手机端显示）
+   ============================================== */
+#hamburger-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    padding: 6px 10px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    box-shadow: none;
+    min-width: unset;
+    height: 100%;
+}
+#hamburger-btn span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: #333;
+    border-radius: 1px;
+    transition: transform 0.2s, opacity 0.2s;
+}
+/* 打开状态：三横变叉 
+#hamburger-btn.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+#hamburger-btn.open span:nth-child(2) { opacity: 0; }
+#hamburger-btn.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+ */
+ 
+/* 手机端抽屉菜单 */
+#mobile-drawer {
+    display: none; /* 默认隐藏 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 500;
+}
+#mobile-drawer.open {
+    display: block;
+}
+/* 半透明遮罩 */
+#mobile-drawer-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+}
+/* 抽屉面板本体 */
+#mobile-drawer-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 220px;
+    background: #ECE9D8;
+    border-right: 2px solid #ACA899;
+    box-shadow: 3px 0 12px rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding-bottom: 120px;
+}
+#mobile-drawer-panel .drawer-title {
+    background: linear-gradient(180deg, #3D95FF 0%, #0054E3 10%, #0372FF 84%, #0144D0 100%);
+    color: white;
+    font-weight: bold;
+    font-size: 13px;
+    padding: 8px 10px;
+    font-family: Tahoma, sans-serif;
+}
+#mobile-drawer-panel .drawer-item-active {
+    background-color: #fbf9f1;
+    font-weight: bold;
+}
+
+.drawer-section {
+    border-bottom: 1px solid #ACA899;
+    padding: 4px 0;
+}
+.drawer-section-title {
+    font-size: 11px;
+    color: #666;
+    padding: 4px 12px 2px;
+    font-family: Tahoma, sans-serif;
+}
+
+
+/* 标题样式：模拟 XP 任务栏侧边栏 */
+.xp-collapse .xp-collapse-title {
+    justify-content: space-between;
+    user-select: none;
+    -webkit-user-select: none;
+  /*   background: #DDD9C4; */
+}
+
+.xp-collapse .xp-collapse-title:active {
+    background: #C8C4B0;
+}
+
+.xp-collapse-body {
+    padding-left: 16px;
+    background: #DDD9C4; 
+}
+
+
+.xp-collapse-sub {
+    padding-left: 10px;
+}
+
+/* 右侧箭头 */
+details.xp-collapse[open] .drawer-item-arrow {
+    transform: rotate(90deg);
+}
+
+details.xp-collapse .drawer-item-arrow {
+    font-size: 10px;
+    transition: transform 0.18s;
+    display: inline-block;
+}
+
+.drawer-item {
+    padding: 8px 16px 8px 24px;
+    font-size: 14px;
+    font-family: Tahoma, sans-serif;
+    cursor: default;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#mobile-drawer-panel .drawer-item-active:hover,
+#mobile-drawer-panel .drawer-item-active:active,
+.drawer-item:hover, 
+.drawer-item:active,
+.drawer-item-arrow:hover, 
+.drawer-item-arrow:active {
+    background: #316AC5;
+    color: white;
+}
+.drawer-item .swatch {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    border: 1px solid rgba(0,0,0,0.3);
+    flex-shrink: 0;
+}
+
+
+
+/* 子选项缩进 */
+.drawer-item-sub {
+    padding-left: 5px; /* 增加左侧缩进，体现层级 */
+    font-size: 13px;
+    border-bottom: 1px solid #ececec;
+}
+
+ 
+/* 词库列表的操作菜单（只有用户词库才有）*/
+/* 词库操作项的语义色，复用 .drawer-item 的其余样式 */
+.drawer-deck-primary { color: #316AC5; font-weight: bold; }
+.drawer-deck-danger  { color: #cc2200; }
+
+
+/* ==============================================
+   移动端响应  (≤ 600px)
+   ============================================== */
+@media (max-width: 600px) {
+ 
+    html, body {
+        overflow: hidden;
+    }
+ 
+    /* --- Header --- */
+    /* 桌面菜单栏隐藏 */
+    .xp-menubar {
+        display: none;
+    }
+    /* 等级栏隐藏（移入抽屉） */
+    .level-bar {
+        display: none;
+    }
+    /* 显示汉堡按钮 */
+    #hamburger-btn {
+        display: flex;
+    }
+    /* tool-bar 只剩汉堡按钮 */
+    .tool-bar {
+        padding: 0;
+        min-height: 30px;
+    }
+    #title-bar {
+        padding: 8px 10px;
+    }
+    .game-title {
+        font-size: 13px;
+        padding-left: 0;
+    }
+    .game-subtitle {
+        display: none;
+    }
+    /* --- 牌局保持4列，缩小卡片 --- */
+    .board {
+        padding: 4px;
+        gap: 6px;
+        padding-bottom: 160px; /* 底部留出俺寻思高度 */
+        overflow-x: hidden;
+    }
+ 
+    .card {
+        height: 130px;
+        margin-top: -80px;
+        padding: 6px;
+        border-radius: 5px;
+    }
+    .card:first-child {
+        margin-top: 0;
+    }
+    .card:last-child {
+        min-height: 130px;
+    }
+
+    .card-text {
+        font-size: 14px;
+        padding-right: 18px;
+    }
+
+    .card-badge {
+        font-size: 10px;
+        top: 26px;
+        right: 3px;
+    }
+    .sortable-ghost {
+        height: 130px !important;
+    }
+    /* 花色图标缩小 */
+    .board.show-hints .card::after {
+        font-size: 13px;
+        top: 5px;
+        right: 6px;
+    }
+ 
+    /* --- 发牌堆：缩小，右下角，在俺寻思上方 --- */
+    #deck-container {
+        bottom: 36px; /* 抬高，避免被俺寻思遮挡 */
+        right: 36px;
+    }
+    .deck-pile {
+        width: 64px;
+        height: 88px;
+    }
+    .deck-card {
+        width: 64px;
+        height: 88px;
+    }
+    .deck-card--back { left: 10px; }
+    .deck-card--mid  { left: 5px; }
+    .deck-count {
+        font-size: 14px;
+    }
+ 
+    /* --- 俺寻思：吸附底部 --- */
+    #think-tank {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 200;
+ 
+        /* 重置桌面版的绝对定位布局 */
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        padding: 0 8px 6px;
+        pointer-events: none; /* 整体穿透，子元素各自设置 */
+     }
+    /* 气泡：左侧铺开 */
+    #tt-body {
+        pointer-events: auto;
+        flex: 1;
+        margin-right: 8px;
+        /* 重置桌面版气泡的绝对定位  */
+        position: relative;
+        bottom: unset;
+        right: unset;
+    }
+    /* 箭头在底栏里不需要向下的箭头，隐藏 
+    .clippy-arrow {
+        display: none;
+    }*/
+    /* 俺寻思图案  右侧固定大小 */
+    .clippy-avatar {
+        pointer-events: auto;
+        flex-shrink: 0;
+    }
+    .clippy-avatar img {
+        width: 48px;
+        height: 48px;
+    }
+ 
+    /* --- 胜利弹窗：手机居中 --- */
+    .xp-dialog {
+        width: 90vw;
+        max-width: 320px;
+    }
+}

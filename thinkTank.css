@@ -1,0 +1,158 @@
+/* -- 核心小精灵容器 -- */
+#think-tank {
+    position: fixed;
+    bottom: 0px;
+    left: 10px;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    z-index: 9999;
+    font-family: 'Comic Sans MS', 'Microsoft YaHei', sans-serif;
+    font-size: 11px;
+    user-select: none;
+    pointer-events: none;
+}
+
+/* -- 小精灵角色区域 -- */
+.clippy-avatar {
+  width: 150px;
+  height: 100px;
+  display: flex;
+  justify-content: flex-end; /* 角色向右对齐 */
+  margin-top: 10px; /* 气泡和角色间的距离 */
+  cursor: pointer;
+}
+
+/*  图像的占位符 */
+#agent-icon {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* 默认状态：空闲 */
+.clippy-avatar #agent-icon {
+  content: url('img/thinktank-hotlatte.png'); 
+}
+
+/* 检索状态：正在寻思 */
+#clippy-agent.is-searching #agent-icon {
+  content: url('img/thinktank-searching-1.png');
+}
+
+
+.clippy-bubble, .clippy-avatar {
+  /* 恢复气泡和角色的交互能力 */
+  pointer-events: auto;
+}
+
+/* -- 气泡主体 -- */
+.clippy-bubble {
+  position: relative;
+  max-width: 250px;
+  padding: 10px;
+  background: #ffffe1; /* Clippy 气泡经典的米黄色 */
+  border: 1px solid #000;
+  border-radius: 8px;  
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 当气泡隐藏时，让精灵给一点视觉上的反馈，即稍微变灰，表示当前不工作 */
+.clippy-bubble.bubble-hidden ~ .clippy-avatar {
+  filter: grayscale(0.5);  
+  opacity: 0.8;
+}
+
+/* 当气泡处于隐藏状态时 */
+.clippy-bubble.bubble-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.8) translateY(10px);
+}
+
+/* 气泡指向小箭头 */
+.clippy-arrow {
+  position: absolute;
+  bottom: -15px; /* 指向下方 */
+  left: 40px; 
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 15px solid #000;  
+}
+
+.clippy-arrow::after {
+  content: '';
+  position: absolute;
+  top: -16px; /* 这里和外层 border-top 的大小有关 */
+  left: -10px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 15px solid #ffffe1; /* 箭头填充色，与气泡背景同色 */
+}
+
+/* -- 关闭按钮 -- */
+button.clippy-close {
+  min-width: unset;    
+  box-shadow: none;    
+  border: none;
+  background: transparent;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 14px;
+  color: #666;
+  cursor: pointer;
+  padding: 1px 5px;
+  line-height: 1;
+  border-radius: 0;
+}
+button.clippy-close:hover { color: #000; }
+
+/* -- 显示区域样式修改 -- */
+#think-tank .xp-display {
+  padding: 5px;  
+  min-height: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 2px;
+}
+
+/*  匹配 Comic Sans 风格 */
+#think-tank .xp-display-hint { color: #555; font-size: 11px; line-height: 1.4; }
+.tt-word         { color: #003399; font-weight: bold; font-size: 12px; }
+.tt-arrow        { color: #aba9a2; font-size: 9px; margin: 2px 0; }
+.tt-translation  { color: #a83800; font-weight: bold; font-size: 13px; }
+
+/* -- 交互高亮和动画 -- */
+
+/* 拖入高亮，用气泡边框色变化 */
+#think-tank.drag-over .clippy-bubble {
+  outline: 2px solid #F9B435;
+  box-shadow: 0 0 15px #F9B435;
+}
+#think-tank.drag-over .clippy-arrow { border-top-color: #ffaa00; }
+#think-tank.drag-over .clippy-arrow::after { border-top-color: #fffae8; }
+
+/* 弹出动画  */
+@keyframes clippy-pop {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+#think-tank.popping .clippy-bubble { animation: clippy-pop 0.2s ease-out; }
+
+/* 隐藏整个精灵和气泡 */
+#think-tank.hidden { display: none; }
+
+

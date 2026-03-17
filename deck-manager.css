@@ -1,0 +1,287 @@
+/* =====================================================
+   deck-manager.css — 词库选择器 + 对话框
+   ===================================================== */
+
+/* --- 词库选择器（在下拉菜单内） --- */
+
+.deck-lang-label {
+    padding: 4px 0 2px 12px;
+    font-size: 10px;
+    color: #888;
+    font-family: Tahoma, sans-serif;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: default;
+}
+
+.deck-selector-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px 5px 20px;
+    cursor: default;
+    font-family: Tahoma, sans-serif;
+    font-size: 12px;
+    color: #111;
+    min-width: 200px;
+    position: relative;
+}
+
+.deck-selector-item:hover {
+    background: #316AC5;
+    color: white;
+}
+
+.deck-selector-item.active {
+    background: #fff;
+}
+
+.deck-selector-item::before {
+    content: "•";
+    opacity: 0;
+}
+.deck-selector-item.active::before {
+    content: "•";
+    opacity: 1;
+}
+
+.deck-selector-item.active:hover {
+    background: #316AC5;
+    color: white;
+}
+
+.deck-item-title {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.deck-item-meta {
+    font-size: 10px;
+    color: #888;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.deck-selector-item:hover .deck-item-meta {
+    color: #cce;
+}
+
+.deck-delete-btn {
+    background: none;
+    border: none;
+    color: #999;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0 2px;
+    line-height: 1;
+    flex-shrink: 0;
+    opacity: 0;
+    transition: opacity 0.1s;
+}
+
+.deck-selector-item:hover .deck-delete-btn {
+    opacity: 1;
+    color: #ffcccc;
+}
+
+.deck-delete-btn:hover {
+    color: #ff4444 !important;
+}
+
+.deck-edit-btn {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 11px;
+    cursor: pointer;
+    padding: 0 8px;
+    line-height: 1;
+    flex-shrink: 0;
+    opacity: 0;
+    transition: opacity 0.1s;
+    font-family: Tahoma, sans-serif;
+}
+
+.deck-selector-item:hover .deck-edit-btn {
+    opacity: 1;
+    color: #cce;
+}
+
+.deck-edit-btn:hover {
+    color: white !important;
+    text-decoration: underline;
+}
+
+
+
+.deck-empty-hint {
+    padding: 8px 14px;
+    font-size: 11px;
+    color: #888;
+    font-family: Tahoma, sans-serif;
+    font-style: italic;
+}
+
+
+
+/* =====================================================
+   通用模态对话框
+   ===================================================== */
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay.show {
+    display: flex;
+    align-items: flex-start; 
+    justify-content: center;
+    /* 允许内容过长时滚动，防止对话框底部超出屏幕无法操作 */
+    overflow-y: auto;
+}
+
+.modal-dialog {
+    width: 90vw;
+    max-width: 520px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* 对话框标题栏关闭按钮
+.xp-title-bar-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+    margin-left: auto;
+    opacity: 0.85;
+}
+.xp-title-bar-close:hover { opacity: 1; }
+ */
+
+/* 对话框正文区 */
+.dialog-body {
+    padding: 12px 14px;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+}
+
+/* 语法表格样式 */
+ 
+.dialog-hint {
+    font-size: 13px;
+    font-family: Tahoma, sans-serif;
+    color: #555;
+    line-height: 1.6;
+    background: #f5f5ee;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 8px 10px;
+}
+
+.dialog-hint table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+.dialog-hint   td { padding: 4px; border: 1px inset #fff; }
+.dialog-hint   th { text-align: left; padding: 4px; background: #DDD9C4; }
+  
+  /* 高亮显示语法符号 */
+.dialog-hint   code { 
+    background: #fff; 
+    padding: 1px 3px; 
+    border: 1px solid #999; 
+    color: #d22; 
+    font-family: Consolas, 'Noto Sans', sans-serif;
+
+    font-variant-ligatures: none;          
+    /* 禁用连字 */
+    text-spacing-trim: space-all;
+    /* 禁止标点挤压 (部分现代浏览器支持) */
+    font-feature-settings: "palt" 0, "kern" 0; 
+    /* 禁用标点压缩 */
+}
+.dialog-hint   .symbol { color: #0000ff; font-weight: bold; }
+.dialog-hint   .note { color: #666; margin-top: 8px; }
+
+/* 对话框内 textarea */
+.dialog-body textarea {
+    width: 100%;
+    box-sizing: border-box;
+    font-family: Consolas, 'Noto Sans', sans-serif; 
+    font-size: 0.9em;
+    line-height: 1.5;
+    border: 1px solid #aaa;
+    padding: 8px;
+    background: #fafaf6;
+    resize: vertical;
+    color: #111;
+    border-radius: 2px;
+
+    font-variant-ligatures: none;          
+    /* 禁用连字 */
+    text-spacing-trim: space-all;
+    /* 禁止标点挤压 (部分现代浏览器支持) */
+    font-feature-settings: "palt" 0, "kern" 0; 
+    /* 禁用标点压缩 */
+}
+
+.dialog-body textarea:focus {
+    outline: 2px solid #316AC5;
+    outline-offset: -1px;
+}
+
+
+/* 对话框按钮行 */
+.dialog-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    padding-top: 4px;
+}
+
+.dialog-actions button {
+    font-family: Tahoma, sans-serif;
+    font-size: 12px;
+    padding: 4px 16px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: linear-gradient(180deg, #3D95FF 0%, #0054E3 10%, #0372FF 84%, #0144D0 100%);
+    color: white;
+    border: 1px solid #003db5;
+}
+
+.btn-primary:hover {
+    filter: brightness(1.1);
+}
+
+
+/* =====================================================
+   手机端适配
+   ===================================================== */
+
+@media (max-width: 600px) {
+    .modal-dialog {
+        width: 95vw;
+        max-width: none;
+    }
+
+    .dialog-body textarea {
+        font-size: 13px;
+    }
+}

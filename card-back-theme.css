@@ -1,0 +1,273 @@
+/* ===== 牌背主题系统 ===== */
+
+/* 隐藏文字（所有主题共用） */
+.card.is-flipped .card-text,
+.card.is-flipped .card-badge,
+.card.is-flipped::after {
+    display: none;
+}
+
+.card.is-flipped {
+    cursor: not-allowed;
+    pointer-events: none;
+    border-radius: 4px;
+}
+
+/* --- 主题 1：经典酒红菱形 + 蜘蛛 --- */
+body[data-card-back="classic"] .card.is-flipped,
+body[data-card-back="classic"] .deck-card--top,
+body[data-card-back="classic"] .deck-card--back,
+body[data-card-back="classic"] .deck-card--mid, 
+body[data-card-back="classic"] .flying-card {
+    background-color: #5c0e0e;
+    background-image:         
+        url(img/spider-classic-center.svg),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpolygon points='6,1 11,6 6,11 1,6' fill='%238b1a1a' stroke='%235c0e0e' stroke-width='0.8'/%3E%3C/svg%3E");
+    background-size: 80% 80%, 18px 18px;
+    background-repeat: no-repeat, repeat;
+    background-position: center,  center;
+    border:3px solid #ededed;
+    outline: 1px solid #000000;
+}
+
+
+/* --- 主题 2：蜘蛛网（XP 风格） --- */
+body[data-card-back="spiderweb"] .card.is-flipped,
+body[data-card-back="spiderweb"] .deck-card--top,
+body[data-card-back="spiderweb"] .deck-card--back,
+body[data-card-back="spiderweb"] .deck-card--mid,
+body[data-card-back="spiderweb"] .flying-card {
+    background-color: #5c0e0e;
+    outline:1px solid #000;
+    background-image:  
+        url(img/spider.svg),
+        url(img/spiderweb.svg),
+        linear-gradient(25deg, #52A0D0, #80CABB, #FFFFA6 );
+    background-size: 100% 100%, 200% 200%, cover;
+    background-repeat: no-repeat, no-repeat, no-repeat;
+    background-position: center, center, center;
+    border:5px solid #B62637;
+}
+
+
+
+/* --- 主题 3：深蓝斜纹 --- */
+body[data-card-back="blue"] .card.is-flipped,
+body[data-card-back="blue"] .deck-card--top,
+body[data-card-back="blue"] .deck-card--back,
+body[data-card-back="blue"] .deck-card--mid, 
+body[data-card-back="blue"] .flying-card {
+    background-color: #0d2240;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Crect x='0' y='0' width='8' height='8' fill='%23163560'/%3E%3Crect x='8' y='8' width='8' height='8' fill='%23163560'/%3E%3C/svg%3E");
+    background-size: 16px 16px;
+    border: 3px solid #c8d8f0;
+    outline: 1px solid #000;
+    box-shadow: inset 0 0 0 1px #0d2240, inset 0 0 0 4px #1d3a6a;
+}
+
+
+body[data-card-back="blue"] .card.is-flipped::before,
+body[data-card-back="blue"] .deck-card--top::before,
+body[data-card-back="blue"] .deck-card--back::before,
+body[data-card-back="blue"] .deck-card--mid::before,
+body[data-card-back="blue"] .flying-card::before {
+    content: '';
+    display: block;
+    position: absolute;
+    inset: 5px;
+    border: 2px solid rgba(100,160,220,0.3);
+    border-radius: 3px;
+    pointer-events: none;
+}
+
+
+/* --- 主题 4：石板鱼鳞纹 --- */
+body[data-card-back="slate"] .card.is-flipped,
+body[data-card-back="slate"] .deck-card--top,
+body[data-card-back="slate"] .deck-card--back,
+body[data-card-back="slate"] .deck-card--mid, 
+body[data-card-back="slate"] .flying-card {
+    background-color: #2a3040;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='12'%3E%3Cellipse cx='10' cy='12' rx='10' ry='4' fill='%23364055' stroke='%231e2535' stroke-width='0.5'/%3E%3C/svg%3E");
+    background-size: 20px 12px;
+    border: 3px solid #8090b0;
+    outline: 1px solid #000;
+  }
+
+
+/* --- 主题 5：浪花 红日 --- */
+body[data-card-back="ocean"] .card.is-flipped,
+body[data-card-back="ocean"] .deck-card--top,
+body[data-card-back="ocean"] .deck-card--back,
+body[data-card-back="ocean"] .deck-card--mid,
+body[data-card-back="ocean"] .flying-card {
+background: 
+        radial-gradient(circle at 75% 35%, #e63946 15%, transparent 16%), 
+        linear-gradient(to bottom, #1d3557 0%, #1d3557 60%, #457b9d 60%, #a8dadc 100%);
+    border: 1px solid #0a192f;
+    box-shadow: inset 0 0 5px rgba(255,255,255,0.3);
+}
+/* --- 主题：麻叶 --- */
+body[data-card-back="asanoha"] .card.is-flipped,
+body[data-card-back="asanoha"] .deck-card--top,
+body[data-card-back="asanoha"] .deck-card--back,
+body[data-card-back="asanoha"] .deck-card--mid,
+body[data-card-back="asanoha"] .flying-card {
+
+    background:
+        repeating-linear-gradient(
+            60deg,
+            #ffffff15 0 2px,
+            transparent 2px 20px
+        ),
+        repeating-linear-gradient(
+            -60deg,
+            #ffffff15 0 2px,
+            transparent 2px 20px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            #ffffff10 0 2px,
+            transparent 2px 20px
+        ),
+        #7a1c1c;
+
+    border: 1px solid #3d0d0d;
+}
+
+
+/* --- 主题 芭蕉 --- */
+body[data-card-back="basho"] .card.is-flipped,
+body[data-card-back="basho"] .deck-card--top,
+body[data-card-back="basho"] .deck-card--back,
+body[data-card-back="basho"] .deck-card--mid,
+body[data-card-back="basho"] .flying-card {
+
+    background-color: #4b6146;
+
+    background-image: 
+        /* 第1层：微弱的径向渐变 */
+        radial-gradient(circle at 30% 30%, rgba(255,255,230,0.05) 0%, transparent 60%),
+
+        /* 第2层：垂直竹纹 */
+        repeating-linear-gradient(
+            90deg,
+            #00000005 0px,
+            #00000005 4px,
+            transparent 4px,
+            transparent 12px,
+            #00000010 12px,
+            #00000010 13px,
+            transparent 13px,
+            transparent 20px
+        ),
+        
+        /* 第3层：噪音纹理 */
+        url("data:image/png;base64,iVBORw0KGgoAAAAAAANSUhEUgAAADIAAAAyCAMAAAAp4eJFAAAAVFBMVEWAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC4Y5M0AAAAGHRSTlMAzDPuM8zMzMzM3u7u7u7M7u7M3u7MzMwS744fAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5QgKAhInIm79QAAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLm4EAAAAWElEQVRYw+3Mxw6AQAxE0SGl997L/3+mD4S5AG65khXvYof4Z54t9p6Z56f56f4Vf97f7/f7XfIiv59P5Nf5RX6dX+TX+UV+nV/k1/lFfp1f5Nf5RX6dX+TX+UV+nT8fHwH5S0wVBgAAAABJRU5ErkJggg==");
+
+    background-blend-mode: normal, normal, overlay;
+    background-size: auto, auto, 100px 100px;
+
+    border: 1px solid #2c3e29;
+    
+    /* 内阴影 */
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.3);
+}
+
+/* --- 主题：早樱 --- */
+
+body[data-card-back="pink"] .card.is-flipped,
+body[data-card-back="pink"] .deck-card--top,
+body[data-card-back="pink"] .deck-card--back,
+body[data-card-back="pink"] .deck-card--mid,
+body[data-card-back="pink"] .flying-card {
+background: 
+        linear-gradient(to bottom, #d8e2dc 0%, #b8e0d2 50%, #eac4d5 100%); /* 淡淡的粉色象征晨昏 */
+
+    border: 1px solid #1b4332;
+    box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+/* --- 主题：铁绀古纸 --- */
+body[data-card-back="oldpcard"] .card.is-flipped,
+body[data-card-back="oldpcard"] .deck-card--top,
+body[data-card-back="oldpcard"] .deck-card--back,
+body[data-card-back="oldpcard"] .deck-card--mid,
+body[data-card-back="oldpcard"] .flying-card {
+background-color: #2b3542;
+    
+    background-image: 
+        /* 第1层：模拟轻微的污渍和退色 (径向渐变) */
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0.05) 100%),
+        /* 第2层：噪音纹理 (Base64 噪点图) */
+        url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4eJFAAAAVFBMVEWAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC4Y5M0AAAAGHRSTlMAzDPuM8zMzMzM3u7u7u7M7u7M3u7MzMwS744fAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5QgKAhInIm79QAAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLm4EAAAAWElEQVRYw+3Mxw6AQAxE0SGl997L/3+mD4S5AG65khXvYof4Z54t9p6Z56f56f4Vf97f7/f7XfIiv59P5Nf5RX6dX+TX+UV+nV/k1/lFfp1f5Nf5RX6dX+TX+UV+nT8fHwH5S0wVBgAAAABJRU5ErkJggg==");
+    
+    background-blend-mode: overlay, normal; 
+    background-size: auto, 100px 100px; /* 噪音图循环 */
+
+    border: 2px solid #e9e0d3;
+    
+    /* 一个非常淡的内阴影，模拟油墨边缘溢出 */
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.4);
+    
+    /* 边缘看起来有一点点磨损感 */
+    border-radius: 4px; 
+}
+
+
+/* --- 主题： 枯金箔 --- */
+body[data-card-back="foiled"] .card.is-flipped,
+body[data-card-back="foiled"] .deck-card--top,
+body[data-card-back="foiled"] .deck-card--back,
+body[data-card-back="foiled"] .deck-card--mid,
+body[data-card-back="foiled"] .flying-card {
+    background-color: #6f4e39;
+    background-image: 
+        /* 第1层：噪音 */
+        url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4eJFAAAAVFBMVEWAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC4Y5M0AAAAGHRSTlMAzDPuM8zMzMzM3u7u7u7M7u7M3u7MzMwS744fAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5QgKAhInIm79QAAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLm4EAAAAWElEQVRYw+3Mxw6AQAxE0SGl997L/3+mD4S5AG65khXvYof4Z54t9p6Z56f56f4Vf97f7/f7XfIiv59P5Nf5RX6dX+TX+UV+nV/k1/lFfp1f5Nf5RX6dX+TX+UV+nT8fHwH5S0wVBgAAAABJRU5ErkJggg=="),
+        /* 第2层：SVG 图标（金色烫金效果） */
+        url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBkPSJNMCAwaDUxMnY1MTJIMHoiIGZpbGw9Im5vbmUiLz48cGF0aCBkPSJNNDYzLjQ2IDM3LjAwOGwtMzAuNjk0IDUwLjczOC03LjA0My0yLjI4Yy0yNy4xNDYtOC43OTctNzEuNTI1LTcuMTUtOTcuNi4xMUwzMjEuMjIgODcuNWwtMjguNjgtNDguNTQzYy0zMy42MyA2OS4yNTQtMzIuMjY0IDExNy41Ni0xNC43OSAxNDguNTc0IDE4LjcxIDMzLjIwOCA1Ny4zNzggNDkuMDkgOTkuMTE3IDQ4LjU3NCA0OC43NDMtLjYwNiA4OC45NjgtMTkuNjY1IDEwNy4wMzUtNTQuMTk0IDE2LjkxOC0zMi4zMzIgMTUuNjg0LTgwLjQ1Ni0yMC40NDMtMTQ0LjkwMnpNMzIzLjkzNSAxMzcuNTk0YzE4LjQ1LjEgMjkuMzYgMTUuMzM4IDMxLjQ2MiAzNi42NDQtMzcuMTEgMTcuOTEtNTMuOTYzIDMuMzk4LTYxLjE3My0yNi41NDUgMTEuMzgyLTcuMDYzIDIxLjMyNC0xMC4xNDQgMjkuNzEtMTAuMXptMTA5LjI2IDBjOC4zODUtLjA0NSAxOC4zMjggMy4wMzYgMjkuNzEgMTAuMS03LjIxIDI5Ljk0Mi0yNC4wNjQgNDQuNDU0LTYxLjE3NCAyNi41NDQgMi4xMDQtMjEuMzA2IDEzLjAxNC0zNi41NDUgMzEuNDYzLTM2LjY0NHptLTI5My41NTMgNTAuOTZjLTEuMjI2LS4wMS0yLjQ0Ni0uMDAzLTMuNjYuMDE4LTMwLjE3NS41MzYtNTYuMTQyIDEwLjU5LTc1Ljc0MyAyNi41NzQtNDMuNDQ0IDM1LjQzLTU3LjI3IDEwMC43NTItMTIuODI0IDE2Ni4xOTIgMjAuMjkzIDMzLjk5NSA0NC40MzIgNTQuMjQgNzAuNzk3IDY0LjE4NyAzMi44NSAxMi4zOTUgNjYuNjU1IDguODIzIDk5Ljk0IDQuMTE0IDMzLjI4NC00LjcxIDY1Ljg1NC0xMC42MyA5Ni44OTYtOC40MiAzMS4wNCAyLjIxMiA2Mi4wOSAxMC4xOCA5MC41MDUgNDEuMTY1IDE5LjM3NCAyMS4xMjUgNDYuODg3LTEuNjI3IDIzLjgyLTI0LjE1Ni0zNS4wMjQtMzQuMjA3LTcyLjUyNy00Ny40Mi0xMDkuMzc3LTUwLjA0LTM2Ljg1LTIuNjItNzIuMiA0LjY5OC0xMDQuMjA3IDkuMjI4LTMyLjAwNyA0LjUzLTYwLjI3MiA2LjU1Mi04NC41NTgtMi42MS0xNC4zOS01LjQzLTI4LjMwOC0xNC44MDItNDEuNTUtMzEuMTQyaDM1MS43NDRjMTMuNjczLTUyLjI5MyAxNC44NjctMTA2LjM2OCAxLjg3My0xNDIuMDcyLTE5Ljc2NSA4LjQ5LTQyLjQxMiAxMi45LTY2LjIgMTMuMTk3aC0uMDAyYy0yOS44NS4zNy01OS40NTgtNi45MjUtODIuOTA3LTIyLjgyMy00LjY0NyAzLjAxMi05LjQwNyA2LjIzLTE0LjI5MiA5LjY4NWwtNS43MzQgNC4wNTctNS40OS00LjM4MmMtNDYuNjMtMzcuMi05MS4wMjgtNTIuNDgtMTI5LjAzLTUyLjc3M3oiIGZpbGw9IiNjM2E2NzAiLz48L3N2Zz4K"),
+        /* 第3层：金箔脱落斑点 */
+        url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURf///////wAAAAAAAAceaQ0AAAADdFJOUefe6/5zSgAAAChJREFUOMtjYGRgYmZiYmZmoS4YHBwYGBgYmJmYmZmZGRmYmJmZWSgLALb4A4f44wY4AAAAAElFTkSuQmCC");
+
+    background-size: 100px 100px, 50px 50px, 60px 60px;
+    background-repeat: repeat, no-repeat, repeat;
+    background-position: center, center, center;
+    background-blend-mode: overlay, screen, screen;
+
+    border: 1px solid #866d41;
+    box-shadow: inset 0 0 12px rgba(0,0,0,0.5);
+}
+
+
+/* --- 主题： 秋雨 --- */
+
+body[data-card-back="rain"] .card.is-flipped,
+body[data-card-back="rain"] .deck-card--top,
+body[data-card-back="rain"] .deck-card--back,
+body[data-card-back="rain"] .deck-card--mid,
+body[data-card-back="rain"] .flying-card {
+
+    background-color: #8b8c7e;
+
+    background-image: 
+        repeating-radial-gradient(
+            circle at center,
+            #7a7b6d 0px,
+            #7a7b6d 1px,
+            transparent 1px,
+            transparent 6px
+        ),
+        
+        /* 沿用噪点，增加纸张纤维感 */
+        url("data:image/png;base64,iVBORw0KGgoAAAAAAANSUhEUgAAADIAAAAyCAMAAAAp4eJFAAAAVFBMVEWAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC4Y5M0AAAAGHRSTlMAzDPuM8zMzMzM3u7u7u7M7u7M3u7MzMwS744fAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5QgKAhInIm79QAAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLm4EAAAAWElEQVRYw+3Mxw6AQAxE0SGl997L/3+mD4S5AG65khXvYof4Z54t9p6Z56f56f4Vf97f7/f7XfIiv59P5Nf5RX6dX+TX+UV+nV/k1/lFfp1f5Nf5RX6dX+TX+UV+nT8fHwH5S0wVBgAAAABJRU5ErkJggg==");
+
+    background-blend-mode: normal, overlay;
+    background-size: 15px 15px, 100px 100px; /* 点状纹理循环要小 */
+
+    border: 1px solid #b5ad9f;
+    
+    /* 弱化的内阴影 */
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+}
+
