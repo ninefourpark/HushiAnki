@@ -187,6 +187,8 @@ async function initGame(deck_id) {
     const now = Date.now();
     const MAX_GROUPS = 5;
 
+
+    // ------ 抽牌逻辑 --------
     let reviewPool = [], newWordsPool = [], learningPool = [];
 
     (deck.cards || []).forEach(card => {
@@ -219,15 +221,15 @@ async function initGame(deck_id) {
     learningPool.sort(() => Math.random() - 0.5);
 
     const overdueCount = reviewPool.length;
-    // totalCards 是在算 这个词库里还没毕业（达到 stage=7）的牌一共有多少张
-    const totalCards = (deck.cards || []).filter(c => { 
-        const s = stats[getStatKey(deck_id, c.hash)];
-        return !s || s.stage < 7;
-    }).length;
 
-    // 逾期牌占待学总量的比例，决定本局复习配额
+    // 分母只算今天实际可玩的牌（逾期 + 陌生），不含冷却中的牌
+    // 原先用"所有未毕业的牌"做分母，会把冷却中的牌也算进去，大幅稀释 overdueRatio，
+    // 导致逾期牌少但新词也为 0 时，配额被压到 1 组的 bug。
+    const playableToday = overdueCount + newWordsPool.length;
+
+    // 逾期牌占今日可玩总量的比例，决定本局复习配额
     // 比例 0% → 最多 1 组复习，比例 100% → 最多 5 组全是复习
-    const overdueRatio = totalCards > 0 ? overdueCount / totalCards : 0;
+    const overdueRatio = playableToday > 0 ? overdueCount / playableToday : 0;
     const maxReview = Math.max(1, Math.round(MAX_GROUPS * Math.min(overdueRatio * 1.5, 1))); // 乘以 1.5 是为了让比例稍高时能更快拉满配额; 超过 1 就截断到 1
     const reviewSlice = reviewPool.slice(0, maxReview);
     const newSlice = newWordsPool.slice(0, MAX_GROUPS - reviewSlice.length);
