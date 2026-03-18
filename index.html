@@ -469,27 +469,28 @@
             <!-- 抽牌逻辑 -->
             <div id="tab-review" role="tabpanel" class="about-tab-content" style="display:none">
                 <div class="about-section">
-                    <p>每局 <strong>5 组牌</strong>，按顺序从以下池子抓取：</p>
+                    <div class="about-section-title">每局怎么抽牌？</div>
+                    <p>每局最多 <strong>5 组牌</strong>，按以下优先顺序从两个池子里抓取：</p>
                     
                     <ul>
-                        <li><strong>1. 到期复习池</strong>：今天该复习的 + 以前没复习的（越旧越优先）。</li>
-                        <li><strong>2. 新牌池</strong>：你还没见过的生词。</li>
-                        <li><strong>3. 提前复习池</strong>：如果前两类不够 5 组，用还没到期的牌补位。</li>
+                        <li><strong>1. 到期复习池</strong>：今天该复习的牌，以及以前错过没复习的牌（越逾期越优先）。
+                            逾期牌越多，本局里复习牌的比例越高，最多占满全部 5 组。</li>
+                        <li><strong>2. 新牌池</strong>：你还没见过的生词，在复习牌没占满 5 组时补位。</li>
                     </ul>
 
-                    <p>
-                        每组牌都有<strong>记忆等级 (Stage)</strong>。
-                        学过一次，等级 + 1。
-                        等级越高，复习间隔越长。
-                    </p>
+                    <p>如果两个池子都空了（今天的新词学完了、也没有逾期复习），本局就会少于 5 组，直到提示"今日牌局结束，明日君再来"。</p>
+                    <p>今天学过但还没到复习时间的牌，<strong>不会</strong>在当天重复出现。</p>
 
                     <div class="about-img-row">
                         <img class="about-img" src="img/stage-logic.jpg" alt="抽牌逻辑示意图" onclick="openLightbox(this)">
                     </div>
 
-                    <p>逾期未复习的牌越多，复习牌在每局中的占比越高。清空逾期后，新词才会变多。</p>
+                    <div class="about-section-title">记忆等级（Stage）</div>
+                    <p>每组牌有 0–7 共 8 个等级。每次消除成功，等级 +1，下次复习间隔随之拉长。等级越高，复习间隔越长。</p>
+                    <p>达到 Stage 7 的牌视为<strong>已掌握</strong>，不再参与日常抽牌。</p>
                 </div>
             </div>
+
 
             <!-- 玩家秀  -->
             <div id="tab-showcase" role="tabpanel" class="about-tab-content" style="display:none">
@@ -583,19 +584,19 @@
 
                     <div class="about-section-title">联络</div>
                     <p>
-                        胡适开心词场在 <a class="about-link" href="https://github.com/ninefourpark/hushi-anki" target="_blank">GitHub</a> 开源。
+                        胡适开心词场在 <a class="about-link" href="https://github.com/ninefourpark/HushiAnki" target="_blank">GitHub</a> 开源。
                     </p>
                     <p>
                         我是 wuliang。
                         如果你喜欢这个莫名其妙的游戏，
-                        <a href="mailto:wuliang@tuta.io?subject=Hushi-Anki">请电邮我</a>。
+                        <a href="mailto:wuliang@tuta.io?subject=HushiAnki">请电邮我</a>。
                     </p>
                     <p>
                         Hi, I'm wuliang.
                         Let me know if things break (or if they're awesome). Find me on
-                        <a class="about-link" href="https://github.com/ninefourpark/hushi-anki" target="_blank">GitHub</a> 
+                        <a class="about-link" href="https://github.com/ninefourpark/HushiAnki" target="_blank">GitHub</a> 
                         or
-                        <a href="mailto:wuliang@tuta.io?subject=Hushi-Anki">send me an email</a>.
+                        <a href="mailto:wuliang@tuta.io?subject=HushiAnki">send me an email</a>.
                     </p>
                 </div>
             </div>
