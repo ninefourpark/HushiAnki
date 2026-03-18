@@ -2,7 +2,7 @@
 
 这是一个网页游戏。你可以在这里用蜘蛛纸牌 / 空档接龙的方式背单词。或者任何你想背诵的东西。
 
-[🚀 点击即玩](https://mitusj.github.io/hushi-anki/)
+[🚀 点击即玩](https://ninefourpark.github.io/hushi-anki/)
 
 ![预览](./img/preview.jpg)
 
