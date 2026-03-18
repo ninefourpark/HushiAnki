@@ -1493,10 +1493,10 @@ function renderProgressBar() {
     const labels = {
         grad: '老友永不忘', 
         due: '待巩固', 
-        tomorrow: '刚见过',
-        upcoming: '有点印象',
-        learning: '印象深刻',
-        unseen: '没见过'
+        tomorrow: '初识',
+        upcoming: '熟悉',
+        learning: '非常熟悉',
+        unseen: '陌生'
     };
 
     const bar = document.getElementById('win-progress-bar');
