@@ -9,7 +9,7 @@
 
 let activeGroups = [];
 let currentDeckId = null;
-let sortableInstances = [];
+let sortableInstances = []; // 保留兼容，不再使用Sortable.js
 let waitingDeck = [];
 let sessionCompletedHashes = [];
 
@@ -874,102 +874,319 @@ function setSuitTheme(theme) {
 
 
 // ============================================================
-//  14. 拖拽
+//  14. 拖拽 —— 原生 Mouse + Touch 统一实现（无 Sortable.js）
 // ============================================================
 
 const eliminatingGroups = new Set();
 
+// ---------- 拖拽全局状态 ----------
+const drag = {
+    active:      false,
+    ghost:       null,   // fixed定位的ghost，始终最顶层
+    sourceCard:  null,   // 被拖起的原始首张卡（DOM保留，仅透明）
+    bundled:     [],     // 同组随行卡（DOM保留，仅透明）
+    sourceCol:   null,
+    offsetX:     0,      // 指针在ghost左上角的X偏移
+    offsetY:     0,
+    cardW:       0,
+    cardH:       0,
+    stackStep:   0,
+    isMobile:    false,
+};
+
+// setupSortable 只绑一次，initGame 多次调用也安全
+let _dragBound = false;
 function setupSortable() {
-    sortableInstances.forEach(i => i.destroy());
-    sortableInstances = [];
+    if (_dragBound) return;
+    _dragBound = true;
+    // 监听在 document 上，穿透 board 的 overflow:auto
+    document.addEventListener('mousedown', onDragStart, { passive: false });
+    document.addEventListener('touchstart', onDragStart, { passive: false });
+}
 
-    document.querySelectorAll('.sortable-list').forEach(col => {
-        const s = new Sortable(col, {
-            group: 'shared', animation: 150, filter: '.is-flipped', preventOnFilter: true,
-            delay: 50, delayOnTouchOnly: true,
-            ghostClass: 'sortable-ghost', chosenClass: 'sortable-chosen', dragClass: 'sortable-drag',
+// ---- 获取事件的客户端坐标（兼容 mouse & touch）----
+function evtXY(e) {
+    const src = (e.changedTouches && e.changedTouches[0])
+             || (e.touches       && e.touches[0])
+             || e;
+    return { x: src.clientX, y: src.clientY };
+}
 
-            onStart(evt) {
-                const itemEl = evt.item;
-                const cards = Array.from(itemEl.parentNode.querySelectorAll('.card'));
-                const index = cards.indexOf(itemEl);
-                const groupId = itemEl.dataset.groupId;
-                const category = itemEl.dataset.category;
-                let currentOrder = parseInt(itemEl.dataset.order);
-                itemEl._bundledCards = [];
-                itemEl.style.zIndex = '9999';
-                itemEl.style.position = 'relative';
+// ---- 找指针正下方的 sortable-list ----
+// ghost 是 pointer-events:none，所以 elementFromPoint 直接穿透
+function getColUnder(x, y) {
+    const el = document.elementFromPoint(x, y);
+    return el ? el.closest('.sortable-list') : null;
+}
 
-                for (let i = index + 1; i < cards.length; i++) {
-                    const next = cards[i];
-                    if (next.dataset.groupId !== groupId || next.classList.contains('is-flipped')) break;
-                    let bundle = false;
-                    if (category === 'context_sorting') {
-                        bundle = true;
-                    } else {
-                        const nextOrder = parseInt(next.dataset.order);
-                        if (nextOrder === currentOrder + 1) { bundle = true; currentOrder = nextOrder; }
-                    }
-                    if (bundle) { next.classList.add('is-bundled'); itemEl._bundledCards.push(next); }
-                    else break;
-                }
+// ---- think-tank 命中检测 ----
+function isOverThinkTank(x, y) {
+    const tt = document.getElementById('tt-body');
+    if (!tt) return false;
+    const r = tt.getBoundingClientRect();
+    return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+}
 
-                if (itemEl._bundledCards.length > 0) {
-                    const stack = document.createElement('div');
-                    stack.className = 'drag-stack';
-                    itemEl._bundledCards.forEach((card, i) => {
-                        const clone = card.cloneNode(true);
-                        clone.classList.remove('is-bundled');
-                        clone.classList.add('drag-clone');
-                        clone.style.marginTop = '0';
-                        clone.style.transform = `translateY(${(i + 1) * 60}px)`;
-                        stack.appendChild(clone);
-                    });
-                    itemEl.appendChild(stack);
-                }
-            },
+// ---- 收集随行卡（源卡之后、连续同组、未翻面）----
+function buildBundle(sourceCard) {
+    const col     = sourceCard.parentNode;
+    const cards   = Array.from(col.querySelectorAll('.card'));
+    const idx     = cards.indexOf(sourceCard);
+    const groupId = sourceCard.dataset.groupId;
+    const cat     = sourceCard.dataset.category;
+    let   curOrd  = parseInt(sourceCard.dataset.order);
+    const bundled = [];
 
-            onMove: evt => evt.related ? (evt.related.nextElementSibling === null && evt.willInsertAfter) : true,
+    for (let i = idx + 1; i < cards.length; i++) {
+        const c = cards[i];
+        if (c.classList.contains('is-flipped')) break;
+        if (c.dataset.groupId !== groupId) break;
+        let ok = false;
+        if (cat === 'context_sorting') {
+            ok = true;
+        } else {
+            const no = parseInt(c.dataset.order);
+            if (no === curOrd + 1) { ok = true; curOrd = no; }
+        }
+        if (ok) bundled.push(c);
+        else break;
+    }
+    return bundled;
+}
 
-            onEnd(evt) {
-                const itemEl = evt.item;
-                if (ThinkTank.isOverTank(evt.originalEvent.clientX, evt.originalEvent.clientY)) {
-                    ThinkTank.receive(itemEl);
-                    evt.from.appendChild(itemEl);
-                    itemEl._bundledCards = [];
-                    return;
-                }
-                const bundled = itemEl._bundledCards || [];
-                const targetCol = evt.to;
-                itemEl.style.zIndex = '';
-                itemEl.style.position = '';
+// ---- 创建 ghost 并挂在 body 最顶层 ----
+function createGhost(sourceCard, bundled, startX, startY) {
+    drag.isMobile  = window.innerWidth <= 600;
+    drag.cardH     = drag.isMobile ? 130 : 160;
+    drag.stackStep = drag.isMobile ? 50  : 60;
 
-                if (bundled.length > 0 && targetCol) {
-                    bundled.forEach((card, i) => {
-                        card.style.transition = 'none';
-                        card.style.transform = `translateY(${(i + 1) * 60}px)`;
-                        card.classList.remove('is-bundled');
-                        card.style.visibility = 'visible';
-                        card.style.opacity = '1';
-                        targetCol.appendChild(card);
-                    });
-                    itemEl.offsetHeight;
-                    bundled.forEach(card => { card.style.transform = 'translateY(0)'; });
-                }
+    const rect   = sourceCard.getBoundingClientRect();
+    drag.cardW   = rect.width;
+    drag.offsetX = startX - rect.left;
+    drag.offsetY = startY - rect.top;
 
-                const stack = itemEl.querySelector('.drag-stack');
-                if (stack) stack.remove();
+    const ghost = document.createElement('div');
+    // 如果当前显示花色，ghost也要显示（ghost不在.board内，需手动传递）
+    const showHints = document.querySelector('.board')?.classList.contains('show-hints');
+    ghost.className = 'drag-ghost-container' + (showHints ? ' show-hints' : '');
+    const totalH = drag.cardH + bundled.length * drag.stackStep;
+    ghost.style.cssText = [
+        'position:fixed', 'z-index:99999', 'pointer-events:none',
+        'top:0', 'left:0', `width:${drag.cardW}px`,
+        `height:${totalH}px`,   // 包含整叠高度，避免裁切
+        'overflow:visible',
+        `transform:translate(${rect.left}px,${rect.top}px)`,
+        'will-change:transform',
+    ].join(';');
 
-                setTimeout(() => {
-                    bundled.forEach(card => card.style.transition = '');
-                    itemEl._bundledCards = [];
-                    refreshFlippedState();
-                    checkAllColumns();
-                }, 160);
-            }
+    const mkClone = (card, extraTop) => {
+        const clone = card.cloneNode(true);
+        clone.classList.remove('is-dragging-source', 'is-flipped');
+        clone.removeAttribute('style');
+        Object.assign(clone.style, {
+            position:    extraTop === 0 ? 'relative' : 'absolute',
+            top:         extraTop === 0 ? '0'        : extraTop + 'px',
+            left:        '0',
+            width:       drag.cardW + 'px',
+            height:      drag.cardH + 'px',
+            margin:      '0',
+            boxSizing:   'border-box',
+            borderRadius:'6px',
+            transition:  'none',
         });
-        sortableInstances.push(s);
+        return clone;
+    };
+
+    ghost.appendChild(mkClone(sourceCard, 0));
+    bundled.forEach((c, i) => ghost.appendChild(mkClone(c, (i + 1) * drag.stackStep)));
+
+    document.body.appendChild(ghost);
+    drag.ghost = ghost;
+}
+
+// ---- ghost 跟手（同步、无 transition）----
+function moveGhost(x, y) {
+    if (!drag.ghost) return;
+    drag.ghost.style.transform =
+        `translate(${x - drag.offsetX}px,${y - drag.offsetY}px)`;
+}
+
+// ---- ghost 飞向目标坐标，完成后回调 ----
+// ghost 作为参数传入（不再从 drag.ghost 读取），避免异步回调污染新拖拽
+function flyGhost(ghost, toX, toY, onDone) {
+    if (!ghost) { onDone && onDone(); return; }
+    ghost.style.transition = 'none';
+    ghost.getBoundingClientRect(); // 强制 reflow
+    ghost.style.transition = 'transform 0.18s cubic-bezier(0.22,1,0.36,1)';
+    ghost.style.transform  = `translate(${toX}px,${toY}px)`;
+
+    let fired = false;
+    const done = () => {
+        if (fired) return;
+        fired = true;
+        ghost.remove();
+        onDone && onDone();
+    };
+    ghost.addEventListener('transitionend', done, { once: true });
+    setTimeout(done, 350);
+}
+
+// ---- 还原源卡和随行卡的可见性 ----
+function restoreSrcVisible(sourceCard, bundled) {
+    sourceCard.classList.remove('is-dragging-source');
+    bundled.forEach(c => c.classList.remove('is-dragging-source'));
+}
+
+// ---- ghost 飞回原位，还原所有卡 ----
+function cancelDrop(ghost, sourceCard, bundled) {
+    const rect = sourceCard.getBoundingClientRect();
+    flyGhost(ghost, rect.left, rect.top, () => restoreSrcVisible(sourceCard, bundled));
+}
+
+// ============================================================
+//  拖拽事件处理
+// ============================================================
+
+function onDragStart(e) {
+    if (drag.active) return;
+    if (e.type === 'mousedown' && e.button !== 0) return;
+
+    const card = e.target.closest('.card');
+    if (!card)                                        return;
+    if (card.classList.contains('is-flipped'))        return;
+    if (card.dataset.eliminating)                     return;
+    if (!card.closest('.sortable-list'))              return;
+
+    e.preventDefault();
+
+    const { x, y } = evtXY(e);
+
+    drag.active     = true;
+    drag.sourceCard = card;
+    drag.sourceCol  = card.parentNode;
+    drag.bundled    = buildBundle(card);
+
+    // 源卡透明占位（不从 DOM 移除，保持列高度稳定）
+    card.classList.add('is-dragging-source');
+    drag.bundled.forEach(c => c.classList.add('is-dragging-source'));
+
+    createGhost(card, drag.bundled, x, y);
+
+    if (e.type === 'touchstart') {
+        document.addEventListener('touchmove',   onDragMove,   { passive: false });
+        document.addEventListener('touchend',    onDragEnd,    { passive: false });
+        document.addEventListener('touchcancel', onDragCancel, { passive: false });
+    } else {
+        document.addEventListener('mousemove', onDragMove);
+        document.addEventListener('mouseup',   onDragEnd);
+    }
+}
+
+function onDragMove(e) {
+    if (!drag.active) return;
+    e.preventDefault();
+    const { x, y } = evtXY(e);
+    moveGhost(x, y);
+}
+
+function onDragCancel() {
+    _endDrag(null, null);
+}
+
+function onDragEnd(e) {
+    const { x, y } = evtXY(e);
+    _endDrag(x, y);
+}
+
+function _endDrag(x, y) {
+    if (!drag.active) return;
+    drag.active = false;
+    cleanupDragListeners();
+
+    // 立即快照所有拖拽状态，并清空 drag 对象
+    // 这样即使后续异步回调执行时，drag 已经被新的拖拽覆盖，也不会相互污染
+    const ghost      = drag.ghost;
+    const sourceCard = drag.sourceCard;
+    const bundled    = [...drag.bundled];
+    const sourceCol  = drag.sourceCol;
+    const cardW      = drag.cardW;
+    const cardH      = drag.cardH;
+    const stackStep  = drag.stackStep;
+
+    drag.ghost      = null;
+    drag.sourceCard = null;
+    drag.bundled    = [];
+
+    // touchcancel / 无效坐标 → 直接飞回
+    if (x === null) {
+        cancelDrop(ghost, sourceCard, bundled);
+        return;
+    }
+
+    // ---- A. think-tank ----
+    if (isOverThinkTank(x, y)) {
+        const tt = document.getElementById('tt-body');
+        const tr = tt.getBoundingClientRect();
+        flyGhost(
+            ghost,
+            tr.left + tr.width / 2 - cardW / 2,
+            tr.top  + tr.height / 2 - cardH / 2,
+            () => {
+                restoreSrcVisible(sourceCard, bundled);
+                ThinkTank.receive(sourceCard);
+            }
+        );
+        return;
+    }
+
+    // ---- B. 找目标列 ----
+    const targetCol = getColUnder(x, y);
+    if (!targetCol) {
+        cancelDrop(ghost, sourceCard, bundled);
+        return;
+    }
+
+    // ---- C. 只允许放到列的最下方 ----
+    const visCards = Array.from(
+        targetCol.querySelectorAll('.card:not(.is-dragging-source)')
+    );
+    const lastVis = visCards[visCards.length - 1];
+
+    let dropOK = false;
+    if (!lastVis) {
+        dropOK = true;
+    } else {
+        const lr = lastVis.getBoundingClientRect();
+        dropOK = (y >= lr.top + lr.height * 0.4);
+    }
+
+    if (!dropOK) {
+        cancelDrop(ghost, sourceCard, bundled);
+        return;
+    }
+
+    // ---- D. ghost 飞向落点，DOM 操作在动画完成后执行 ----
+    const colRect = targetCol.getBoundingClientRect();
+    const flyX = colRect.left;
+    const flyY = lastVis
+        ? lastVis.getBoundingClientRect().top + stackStep
+        : colRect.top;
+
+    flyGhost(ghost, flyX, flyY, () => {
+        restoreSrcVisible(sourceCard, bundled);
+        targetCol.appendChild(sourceCard);
+        bundled.forEach(c => targetCol.appendChild(c));
+        refreshFlippedState();
+        checkAllColumns();
     });
+}
+
+function cleanupDragListeners() {
+    document.removeEventListener('mousemove',   onDragMove);
+    document.removeEventListener('mouseup',     onDragEnd);
+    document.removeEventListener('touchmove',   onDragMove);
+    document.removeEventListener('touchend',    onDragEnd);
+    document.removeEventListener('touchcancel', onDragCancel);
 }
 
 // ============================================================
@@ -1101,45 +1318,61 @@ function eliminateGroup(cardElements, groupId) {
 
 // 卡牌消除音效。用 Web Audio API 合成
 function playEliminateSound() {
-    try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const t = ctx.currentTime;
 
-        // 白噪音模拟纸张摩擦
-        const bufferSize = ctx.sampleRate * 0.08; // 80ms
-        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-            data[i] = (Math.random() * 2 - 1);
-        }
+    // 主体
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1400, t);
+    osc.frequency.exponentialRampToValueAtTime(900, t + 0.025);
 
-        const noise = ctx.createBufferSource();
-        noise.buffer = buffer;
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.7, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.025);
 
-        // 带通滤波器，保留纸张频率范围，滤掉低频和高频
-        const filter = ctx.createBiquadFilter();
-        filter.type = 'bandpass';
-        filter.frequency.value = 2200;
-        filter.Q.value = 0.8;
+    osc.connect(gain);
+    gain.connect(ctx.destination);
 
-        const gain = ctx.createGain();
-        gain.gain.setValueAtTime(0.6, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+    osc.start(t);
+    osc.stop(t + 0.025);
 
-        noise.connect(filter);
-        filter.connect(gain);
-        gain.connect(ctx.destination);
+    // 短高频
+    const buffer = ctx.createBuffer(1, ctx.sampleRate * 0.006, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) {
+      data[i] = (Math.random() * 2 - 1) * 0.15;
+    }
 
-        noise.start(ctx.currentTime);
-        noise.stop(ctx.currentTime + 0.08);
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
 
-    } catch (e) {}
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'highpass';
+    filter.frequency.value = 3000; // 高频
+
+    const noiseGain = ctx.createGain();
+    noiseGain.gain.setValueAtTime(0.15, t);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001, t + 0.006);
+
+    noise.connect(filter);
+    filter.connect(noiseGain);
+    noiseGain.connect(ctx.destination);
+
+    noise.start(t);
+    noise.stop(t + 0.006);
+
+  } catch (e) {}
 }
+
+
 
 // ============================================================
 //  17. 胜利
 // ============================================================
 
-function handleVictory() { showWinMessage(); playWinAnimation(); }
+function handleVictory() { showWinMessage(); }
 
 function playWinAnimation() {
     for (let i = 0; i < 40; i++) {
@@ -1156,34 +1389,51 @@ function playWinAnimation() {
     }
 }
 
-function  playWinSound() {
-    try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+function playWinSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const t = ctx.currentTime;
 
-        // 两个音符叠加，产生"叮"的感觉
-        const notes = [523.25, 783.99]; // C5 + G5
+    const melodies = [
+        // C5-E5-G5-C6 (经典大三和弦上升)
+        [523.25, 659.25, 783.99, 1046.50], 
+        // 超级马里奥跳跃短旋律 C E G C
+        [261.63, 329.63, 392.00, 523.25],
+        // 塞尔达获取道具音 E G E
+        [329.63, 392.00, 329.63]
 
-        notes.forEach((freq, i) => {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
+        // 口袋妖怪战斗胜利 G A C
+        [392.00, 440.00, 523.25],
 
-            osc.connect(gain);
-            gain.connect(ctx.destination);
+        // 俄罗斯方块得分音 C D F
+        [261.63, 293.66, 349.23],
+    ];
 
-            osc.type = 'square';
-            osc.frequency.value = freq;
+    // 随机选一个乐段
+    const notes = melodies[Math.floor(Math.random() * melodies.length)];
 
-            const startTime = ctx.currentTime + i * 0.06; // 两个音符略微错开
-            gain.gain.setValueAtTime(0.18, startTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.4);
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
 
-            osc.start(startTime);
-            osc.stop(startTime + 0.4);
-        });
+      osc.type = 'sine'; 
+      osc.frequency.setValueAtTime(freq, t);
 
-    } catch (e) {
-        // 浏览器不支持或用户未交互，静默失败
-    }
+      // 轻微 pitch 波动
+      osc.frequency.exponentialRampToValueAtTime(freq * 1.05, t + 0.3);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      const start = t + i * 0.25; // 每个音错开
+      gain.gain.setValueAtTime(0.2, start);  // 低音
+      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.5); // 尾音柔和
+
+      osc.start(start);
+      osc.stop(start + 0.5);
+    });
+
+  } catch (e) {}
 }
 
 function showWinMessage() {
@@ -1233,19 +1483,19 @@ function renderProgressBar() {
 
     const colors = {
         grad: '#4372ff',      //  (完成)
-        due: '#4db5ff',       //  (现在就该学)
-        tomorrow: '#c2d52f',  // (明天)
-        upcoming: '#FFD54F',  //  (后天)
-        learning: '#fff282',  //  (稳固中,超过三天)
+        due: '#4db5ff',       //  (逾期 + 现在就该学)
+        tomorrow: '#c2d52f',  // (明天复习)
+        upcoming: '#FFD54F',  //  (后天复习)
+        learning: '#fff282',  //  (三天后复习)
         unseen: '#9E9E9E'     // 灰色 (未开始)
     };
 
     const labels = {
-        grad: '掌握', 
-        due: '即将重逢', 
-        tomorrow: '明天再见',
-        upcoming: '后天再见',
-        learning: '3天后再见',
+        grad: '老友永不忘', 
+        due: '待巩固', 
+        tomorrow: '刚见过',
+        upcoming: '有点印象',
+        learning: '印象深刻',
         unseen: '没见过'
     };
 

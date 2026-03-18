@@ -9,9 +9,9 @@
 
 :root {
     /* 默认字体变量（按语言分别定义） */
-    --font-card-en: sans-serif;
-    --font-card-ja: sans-serif;
-    --font-card-zh: sans-serif;
+    --font-card-en: system-ui, "Segoe UI", Tahoma, "Noto Sans", -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    --font-card-ja: system-ui, "Segoe UI", "Noto Sans JP", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Source Han Sans CN",  -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-card-zh: system-ui, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Source Han Sans CN", -apple-system, Arial, sans-serif;
     /*中文回退字体*/
     --font-fallback-zh: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Source Han Sans CN";
     --font-fallback-zh-serif: "Source Han Serif SC", "STSong", "SimSun";
@@ -41,7 +41,7 @@
   --font-card-en: system-ui, "Segoe UI", Roboto, "Noto Sans", -apple-system, BlinkMacSystemFont, Arial, sans-serif;
 }
 [data-font-en="roboto"] {
-    --font-card-en: 'Roboto', var(--font-fallback-zh), sans-serif;
+    --font-card-en: 'Roboto', "Segoe UI", Tahoma, var(--font-fallback-zh), sans-serif;
 }
 [data-font-en="georgia"] {
   --font-card-en: 'Georgia', var(--font-fallback-zh), serif;
@@ -75,7 +75,7 @@
 
 /* ---------- Chinese fonts ---------- */
 [data-font-ja="system-zh"] {
-  --font-card-en: system-ui, -apple-system, Arial, sans-serif;
+  --font-card-zh: system-ui, -apple-system, Arial, sans-serif;
 }
 [data-font-zh="sans"] {
   --font-card-zh:
@@ -440,70 +440,42 @@ body {
     padding-bottom: 20px;
 }
 
-/* 1. 正在被鼠标抓着的那张牌 (顶梁柱) */
-.sortable-drag {
-   /*  z-index: 10000 !important;*/
-   /*  background: white !important;*/
 
-   /* 隐藏原始镜像，因为我们已经有自定义的 stack 了 */
-    opacity: 0 !important; 
+/* ---- 新原生拖拽系统 ---- */
+ 
+/* 拖起时插入的占位符——保持列高度稳定，防止布局跳变 */
+.drag-placeholder {
+    visibility: hidden;
+    pointer-events: none;
+    flex-shrink: 0;
+    box-sizing: border-box;
 }
-.sortable-drag .card-text {
-    visibility: hidden; /* 隐藏主卡片的文字，由 stack 里的克隆体显示 */
-}
-
-/* 2. 被“捆绑”一起走的牌 (留在原处的视觉反馈) */
-/* 确保 bundled 卡片在拖拽时绝对不可见 */
-.is-bundled {
-    opacity: 0 !important;
-    pointer-events: none !important;
+ 
+/* 被拖起的原始卡——visibility:hidden保留占位空间 */
+.is-dragging-source {
     visibility: hidden !important;
-    transition: none !important; /* 强制禁用动画 */
+    pointer-events: none !important;
 }
-
-/* 3. 在目标位置出现的占位符 (虚影) */
-.sortable-ghost{
-    height:160px !important;
-    transition: opacity 0s; /* 不要让 ghost 有淡出，立即消失 */
-}
-
-/* 4. 消除选中时的硬边缘，增加流畅感 */
-.sortable-chosen {
-    cursor: grabbing;
-    position: relative;
-    outline: 3px solid #F9B435;
-    transition: outline 0s;
-}
-
-/* 正在被鼠标拖拽着的卡牌组 */
-.drag-stack {
-    /* .drag-stack（拖拽时的卡牌堆）被定位在 position: absolute 的时候，如果用户向右拖动卡牌时超出了视口，而 body 和 #game-container 虽然设置了 overflow: hidden，但拖拽元素是用 JS 动态挂载并通过 position: fixed / absolute 移动的，这会触发浏览器重新计算文档宽度，导致滚动条和视口之间会出现一条空隙 */
+ 
+/* ghost容器——fixed始终最顶层，跟随指针 */
+.drag-ghost-container {
     position: fixed;
+    z-index: 99999;
+    pointer-events: none;
+    will-change: transform;
     top: 0;
     left: 0;
-    right: 0;
-    width: 100%;
-    pointer-events: none;
-    z-index: 2;
-    /* 删掉 inset: 0，改用明确的 top/left/width */
-    
-    /* 强制让 stack 的内容显示，不受父级透明度影响 */
-    opacity: 1 !important; 
-    visibility: visible !important;
+    overflow: visible;   /* 随行卡绝对定位超出容器，必须可见 */
+}
+ 
+/* ghost中所有卡：强制覆盖margin和transition */
+.drag-ghost-container .card {
+    margin-top: 0 !important;
+    transition: none !important;
+    cursor: grabbing !important;
 }
 
-/* 被“捆绑”一起走的牌(在被鼠标拖拽着的卡牌组中)  */
-.drag-clone {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;  
-}
 
-.sortable-chosen {
-    outline: 3px solid #F9B435;
-    transition: outline 0s;
-}
 
 /* 发牌堆样式 */
 #deck-container {
@@ -569,10 +541,10 @@ body {
 /* ----- 花色 ----- */
 .board.show-hints .card::after {
     position: absolute;
-    top: 6px; /* 稍微下移，给厚边框留位置 */
+    top: 8px; /* 稍微下移，给厚边框留位置 */
     right: 8px;
-    width: 22px; 
-    height: 22px;
+    width: 1.3em; 
+    height: 1.3em; 
     content: "";
     pointer-events: none;
     background-size: contain;
@@ -585,39 +557,58 @@ body {
 .board.show-hints .card[data-category="intensity_ranking"]::after { content: var(--suit-ir); color: var(--suit-ir-color); }
 .board.show-hints .card[data-category="dialogue_chain"]::after    { content: var(--suit-dc); color: var(--suit-dc-color); }
 
+/* ghost在body上，不在.board内；JS会把show-hints同步到ghost容器class */
+/* 必须重复基础定位规则，ghost的::after无法继承.board版本 */
+.drag-ghost-container.show-hints .card::after {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 1.3em; 
+    height: 1.3em; 
+    content: "";
+    pointer-events: none;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.drag-ghost-container.show-hints .card[data-category="sentence_builder"]::after  { content: var(--suit-sb); color: var(--suit-sb-color); }
+.drag-ghost-container.show-hints .card[data-category="context_sorting"]::after   { content: var(--suit-cs); color: var(--suit-cs-color); }
+.drag-ghost-container.show-hints .card[data-category="intensity_ranking"]::after { content: var(--suit-ir); color: var(--suit-ir-color); }
+.drag-ghost-container.show-hints .card[data-category="dialogue_chain"]::after    { content: var(--suit-dc); color: var(--suit-dc-color); }
+ 
 
 /* ----------------- 彩色几何 ----------------- */
+[data-suit-theme="shapes"] .drag-ghost-container.show-hints .card[data-category="sentence_builder"]::after,
 [data-suit-theme="shapes"] .board.show-hints .card[data-category="sentence_builder"]::after {
     content: "";
-    width: 1.3em;
-    height: 1.3em;
+    
     background-color: #1565C0;
     mask-image: url('suits/shapes-round.svg');
     mask-size: contain;
     mask-repeat: no-repeat;
     /* 覆盖掉上面的 color，改用 background-color 上色 */
 }
+[data-suit-theme="shapes"] .drag-ghost-container.show-hints .card[data-category="context_sorting"]::after ,
 [data-suit-theme="shapes"] .board.show-hints .card[data-category="context_sorting"]::after {
     content: "";
-    width: 1.3em;
-    height: 1.3em;
+    
     background-color: #cc1111;
     mask-image: url('suits/shapes-heart.svg');
     mask-size: contain;
     mask-repeat: no-repeat;
 }
+[data-suit-theme="shapes"] .drag-ghost-container.show-hints .card[data-category="intensity_ranking"]::after ,
 [data-suit-theme="shapes"] .board.show-hints .card[data-category="intensity_ranking"]::after {
     content: "";
-    width: 1.3em;
-    height: 1.3em;
+    
     background-color: #FF9800;
     mask-image: url('suits/shapes-triangle.svg');
     mask-size: contain;
     mask-repeat: no-repeat;
 }
+[data-suit-theme="shapes"] .drag-ghost-container.show-hints .card[data-category="dialogue_chain"]::after ,
 [data-suit-theme="shapes"] .board.show-hints .card[data-category="dialogue_chain"]::after {
     content: "";
-    width: 1.3em;
+    
     height: 1.3em;
     background-color: #4CAF50;
     mask-image: url('suits/shapes-star.svg');
@@ -627,38 +618,36 @@ body {
 
 
 /*  ----------------- 经典纸牌 ----------------- */
+[data-suit-theme="playing-cards"] .drag-ghost-container.show-hints .card[data-category="sentence_builder"]::after ,
 [data-suit-theme="playing-cards"] .board.show-hints .card[data-category="sentence_builder"]::after {
     content: "";
-    width: 1.3em;
-    height: 1.3em;
+    
     background-color: #111111;
     mask-image: url('suits/playing-cards-club.svg');
     mask-size: contain;
     mask-repeat: no-repeat;
     /* 覆盖掉上面的 color，改用 background-color 上色 */
 }
+[data-suit-theme="playing-cards"] .drag-ghost-container.show-hints .card[data-category="context_sorting"]::after ,
 [data-suit-theme="playing-cards"] .board.show-hints .card[data-category="context_sorting"]::after {
     content: "";
-    width: 1.3em;
-    height: 1.3em;
+
     background-color: #cc1111;
     mask-image: url('suits/playing-cards-heart.svg');
     mask-size: contain;
     mask-repeat: no-repeat;
 }
+[data-suit-theme="playing-cards"] .drag-ghost-container.show-hints .card[data-category="intensity_ranking"]::after ,
 [data-suit-theme="playing-cards"] .board.show-hints .card[data-category="intensity_ranking"]::after {
     content: "";
-    width: 1.3em;
-    height: 1.3em;
     background-color: #cc1111;
     mask-image: url('suits/playing-cards-diamond.svg');
     mask-size: contain;
     mask-repeat: no-repeat;
 }
+[data-suit-theme="playing-cards"] .drag-ghost-container.show-hints .card[data-category="dialogue_chain"]::after ,
 [data-suit-theme="playing-cards"] .board.show-hints .card[data-category="dialogue_chain"]::after {
     content: "";
-    width: 1.3em;
-    height: 1.3em;
     background-color: #111111;
     mask-image: url('suits/playing-cards-spade.svg');
     mask-size: contain;
@@ -666,38 +655,34 @@ body {
 }
 
 /*  ----------------- 蜘蛛语法符号 -----------------  */
+[data-suit-theme="math"] .drag-ghost-container.show-hints .card[data-category="sentence_builder"]::after,
 [data-suit-theme="math"] .board.show-hints .card[data-category="sentence_builder"]::after {
     content: "";
-    width: 1.3em;
-    height: 1.3em;
     background-color: #1565C0;
     mask-image: url('suits/math-plus.svg');
     mask-size: contain;
     mask-repeat: no-repeat;
     /* 覆盖掉上面的 color，改用 background-color 上色 */
 }
+[data-suit-theme="math"] .drag-ghost-container.show-hints .card[data-category="context_sorting"]::after,
 [data-suit-theme="math"] .board.show-hints .card[data-category="context_sorting"]::after {
     content: "";
-    width: 1.3em;
-    height: 1.3em;
     background-color: #cc1111;
     mask-image: url('suits/math-comma.svg');
     mask-size: contain;
     mask-repeat: no-repeat;
 }
+[data-suit-theme="math"] .drag-ghost-container.show-hints .card[data-category="intensity_ranking"]::after,
 [data-suit-theme="math"] .board.show-hints .card[data-category="intensity_ranking"]::after {
     content: "";
-    width: 1.3em;
-    height: 1.3em;
     background-color: #FF9800;
     mask-image: url('suits/math-greater.svg');
     mask-size: contain;
     mask-repeat: no-repeat;
 }
+[data-suit-theme="math"] .drag-ghost-container.show-hints .card[data-category="dialogue_chain"]::after ,
 [data-suit-theme="math"] .board.show-hints .card[data-category="dialogue_chain"]::after {
     content: "";
-    width: 1.3em;
-    height: 1.3em;
     background-color: #4CAF50;
     mask-image: url('suits/math-slash.svg');
     mask-size: contain;
@@ -705,11 +690,10 @@ body {
 }
 
 
-
 /* 根卡牌的标记 */
 .card-badge {
     position: absolute;
-    top: 35px;
+    top: 30px;
     right: 5px;
     color: #000;
     font-size: 12px;
@@ -767,7 +751,7 @@ body {
     /* 通过 margin-top 锁定顶端距离屏幕边缘的位置 */
     margin-top: 50px;
     /* 给一个最小宽度或最大高度，防止极端情况 */
-    min-width: 400px;
+    min-width: 300px;
     max-height: calc(100vh - 100px); 
     display: flex;
     flex-direction: column;

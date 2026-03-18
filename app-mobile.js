@@ -13,7 +13,6 @@ function toggleMobileDrawer() {
     if (thinkTank) thinkTank.style.display = isOpen ? 'none' : '';
 }
  
-
  
 // 抽屉内「花色」按钮文字与桌面保持同步
 function toggleHints() {

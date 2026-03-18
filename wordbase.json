@@ -5,75 +5,86 @@
       "level_name": "Lv.1 找出同类词 & 连词成句",
       "unlocked_types": ["sentence_builder", "context_sorting"],
       "categories": {
-
         "sentence_builder": [
           {
-            "id": "3bd627d8",
-            "content": ["She speaks three languages", "but still orders coffee", "by pointing at the menu."]
-          },
-          {
-            "id": "46f49c7a",
-            "content": ["I need to make", "a reservation for", "two at seven."]
-          },
-          {
-              "id": "156d2b4e",
-              "content": ["Do you know", "how to get to", "the nearest subway station?"]
-          },
-          {
-            "id": "bffc8ca0",
-            "content": ["Could you please", "stop hitting the back of", " my seat?"]
-          },
-          {
-            "id": "490cbfee",
-            "content": ["I am professional", "at pretending to understand", "what you just said."]
-          },
-          {
-            "id": "2da9fcbd",
-            "content": ["Is there any", "discount if I", "pay with cash?"]
-          },
-          {
-            "id": "ded7f244",
+
             "content": [
-              "My phone is",
-              "about to die,",
+              "Life is like a box of chocolates;",
+              "you never know what you're gonna get."
+            ],
+            "id": "154ab628"
+          },
+          {
+
+            "content": [
+              "Big Brother",
+              "is watching you."
+            ],
+            "id": "8125ff40"
+          },
+          {
+
+            "content": [
+              "The first rule of Fight Club is",
+              "you do not talk about Fight Club."
+            ],
+            "id": "700ac6b4"
+          },
+          {
+
+            "content": [
+              "I need to make",
+              "a reservation for two at seven."
+            ],
+            "id": "46f49c7a"
+          },
+          {
+
+            "content": [
+              "My phone is about to die,",
               "do you have a charger?"
-            ]
+            ],
+            "id": "ded7f244"
           },
           {
+
             "content": [
-              "I spent forty minutes",
-              "on the treadmill",
-              "but only burned a tiny bit of cake."
+              "With great power",
+              "comes great responsibility."
             ],
-            "id": "74fd74ac"
+            "id": "b94a4070"
           },
           {
+
             "content": [
-              "I accidentally",
-              "liked a photo from three years ago",
-              "while scrolling through his profile."
+              "She speaks three languages",
+              "but still orders coffee",
+              "by pointing at the menu."
             ],
-            "id": "73c842b7"
+            "id": "3bd627d8"
           },
           {
+
             "content": [
-              "It is your turn",
-              "to take out the trash",
-              "and wash the dishes."
+              "Could you please",
+              "stop hitting the back of",
+              "my seat?"
             ],
-            "id": "eb6d4e85"
+            "id": "bffc8ca0"
           },
           {
+
             "content": [
-              "Please don't",
-              "tell me the ending",
-              "because I haven't seen it yet."
+              "All animals are equal,",
+              "but some animals",
+              "are more equal than others."
             ],
-            "id": "800cf781"
+            "id": "94b8220b"
           }
         ],
         "context_sorting": [
           {
+
             "group_name": "Rainy day tools",
             "content": [
               "umbrella",
@@ -84,6 +95,7 @@
             "id": "18e87228"
           },
           {
+
             "group_name": "Bakery",
             "content": [
               "cupcake",
@@ -94,6 +106,7 @@
             "id": "43570090"
           },
           {
+
             "group_name": "Clothes",
             "content": [
               "shirt",
@@ -104,6 +117,7 @@
             "id": "7c41413b"
           },
           {
+
             "group_name": "On the street",
             "content": [
               "traffic light",
@@ -114,16 +128,18 @@
             "id": "b944359f"
           },
           {
+
             "group_name": "In the kitchen",
             "content": [
-              "knife",
-              "pan",
+              "dishwasher",
+              "oven",
               "fridge",
               "microwave"
             ],
-            "id": "1c02ead5"
+            "id": "962370b3"
           },
           {
+
             "group_name": "How does it taste?",
             "content": [
               "spicy",
@@ -134,6 +150,7 @@
             "id": "791d3571"
           },
           {
+
             "group_name": "Digital Devices",
             "content": [
               "smartphone",
@@ -144,6 +161,7 @@
             "id": "69ad4024"
           },
           {
+
             "group_name": "What pets do",
             "content": [
               "barking",
@@ -154,6 +172,7 @@
             "id": "9d21ed0b"
           },
           {
+
             "group_name": "Cooking",
             "content": [
               "boil",
@@ -164,6 +183,7 @@
             "id": "5f54201f"
           },
           {
+
             "group_name": "Good for the planet",
             "content": [
               "recycling",
@@ -174,16 +194,18 @@
             "id": "31a9315a"
           },
           {
+
             "group_name": "Units of Time",
             "content": [
-              "decade",
-              "century",
-              "fortnight",
-              "millennium"
+              "hour",
+              "minute",
+              "month",
+              "year"
             ],
-            "id": "18d3e89a"
+            "id": "77ab8f72"
           },
           {
+
             "group_name": "Shapes",
             "content": [
               "circle",
@@ -194,6 +216,7 @@
             "id": "7e957c39"
           },
           {
+
             "group_name": "Body parts",
             "content": [
               "head",
@@ -204,16 +227,18 @@
             "id": "eb6ef40e"
           },
           {
+
             "group_name": "Emotions",
             "content": [
               "happy",
               "sad",
               "angry",
-              "tired"
+              "nervous"
             ],
-            "id": "994c1f7e"
+            "id": "45a978b8"
           },
           {
+
             "group_name": "Physical Feelings",
             "content": [
               "hungry",
@@ -224,6 +249,7 @@
             "id": "67f6830b"
           },
           {
+
             "group_name": "Natural Disasters",
             "content": [
               "flood",
@@ -243,76 +269,200 @@
       "categories": {
         "sentence_builder": [
           {
-              "id": "d1c6e849",
-              "content": ["The annual film festival", "will be held in", "the historic city center."]
+
+            "content": [
+              "To be or not to be,",
+              "that is the question."
+            ],
+            "id": "d85d9d22"
           },
           {
-            "id": "581415ec",
-            "content": ["The flight was delayed,", "so she read", "the entire in-flight magazine."]
+
+            "content": [
+              "Please don't tell me the ending",
+              "because I haven't seen it yet."
+            ],
+            "id": "800cf781"
           },
           {
-            "id": "81b726a8",
-            "content": ["He said he'd be", "five minutes late,", "forty minutes ago."]
+
+            "content": [
+              "The flight was delayed,",
+              "so she read the entire in-flight magazine."
+            ],
+            "id": "581415ec"
+          },
+          {
+
+            "content": [
+              "I am professional",
+              "at pretending to understand",
+              "what you just said."
+            ],
+            "id": "490cbfee"
+          },
+          {
+
+            "content": [
+              "Is there any",
+              "discount if I",
+              "pay with cash?"
+            ],
+            "id": "2da9fcbd"
+          },
+          {
+
+            "content": [
+              "It is your turn",
+              "to take out the trash",
+              "and wash the dishes."
+            ],
+            "id": "eb6d4e85"
           }
         ],
         "context_sorting": [
           {
-            "id": "d47e10a9",
+
             "group_name": "Online shopping",
-            "content": ["Add to cart", "Promo code", "Estimated delivery", "Return policy"]
+            "content": [
+              "Add to cart",
+              "Promo code",
+              "Estimated delivery",
+              "Return policy"
+            ],
+            "id": "947a47fd"
           },
           {
-            "id": "e9b2f8a1",
-            "group_name": "Renting a place",
-            "content": ["Security deposit", "Utilities included", "Lease agreement", "Maintenance request"]
-          },
-          {
-            "id": "g4h9i2j5",
+
             "group_name": "Coffee shop order",
-            "content": ["Oat milk", "Extra shot", "To go", "For here"]
+            "content": [
+              "Oat milk",
+              "Extra shot",
+              "To go",
+              "For here"
+            ],
+            "id": "cdf4f542"
+          },
+          {
+
+            "group_name": "fruit",
+            "content": [
+              "apple",
+              "strawberry",
+              "mango",
+              "blueberry"
+            ],
+            "id": "0c79e710"
+          },
+          {
+
+            "group_name": "color",
+            "content": [
+              "red",
+              "blue",
+              "green",
+              "yellow"
+            ],
+            "id": "c0631b9b"
+          },
+          {
+
+            "group_name": "animal",
+            "content": [
+              "cow",
+              "sheep",
+              "donkey",
+              "horse"
+            ],
+            "id": "45be2134"
+          },
+          {
+
+            "group_name": "school",
+            "content": [
+              "pen",
+              "pencil",
+              "notebook",
+              "ruler"
+            ],
+            "id": "f9a50694"
+          },
+          {
+
+            "group_name": "traffic",
+            "content": [
+              "motorcycle",
+              "tram",
+              "ferry",
+              "subway"
+            ],
+            "id": "e1d75dc3"
           }
         ],
         "dialogue_chain": [
           {
+
             "content": [
-              "Hi, welcome! Can I start you off with a drink?",
-              "Just water, please.",
-              "Still or sparkling? We only have tap, but I like to ask."
+              "Nice to meet you!",
+              "Nice to meet you too!"
             ],
-            "id": "2d2fd978"
+            "id": "c7f65535"
           },
           {
+
             "content": [
-              "I think I left my umbrella here last Tuesday.",
-              "Can you describe it?",
-              "Black. Foldable. Has a tiny duck on the handle.",
-              "We actually have three of those. Which duck?"
+              "What's your favorite season?",
+              "I love winter because of the snow."
             ],
-            "id": "4c4a67db"
+            "id": "fdbf74ad"
           },
           {
+
             "content": [
-              "Are you ready to order?",
-              "I think I need another minute.",
-              "Take your time. I'll just stand here looking busy."
+              "Do you think it's going to rain?",
+              "The sky is grey. So, yes, definitely."
             ],
-            "id": "c7bf2393"
+            "id": "c13c3644"
           },
           {
-            "content": [
-              "How's everything tasting?",
-              "Honestly? Better than I expected.",
-              "We'll take that as a five-star review."
-            ],
-            "id": "16044659"
-          },
-          {
+
             "content": [
               "Could I get the check, please?",
-              "Of course! Cash or card?",
-              "Card. And maybe a hug. This week has been rough."
+              "Of course! Cash or card?"
             ],
-            "id": "157fe17a"
+            "id": "d251e811"
+          },
+          {
+
+            "content": [
+              "Excuse me, is there a pharmacy nearby?",
+              "Yes, go straight and turn left at the supermarket."
+            ],
+            "id": "d40dfa19"
+          },
+          {
+
+            "content": [
+              "Hi, welcome! Can I start you off with a drink?",
+              "Just water, please."
+            ],
+            "id": "b7b10549"
+          },
+          {
+
+            "content": [
+              "Does your dog know any tricks?",
+              "He can make a whole steak disappear in 3 seconds."
+            ],
+            "id": "d143744d"
+          },
+          {
+
+            "content": [
+              "It's freezing outside today!",
+              "Tell me about it. My coffee turned into an ice cream in two minutes."
+            ],
+            "id": "f740518c"
           },
           {
 
@@ -330,55 +480,25 @@
               "You got it. Long enough to hide your ears?",
               "Exactly. I'm not ready to show them to the world yet."
             ],
-            "id": "a8e9b01a"
+            "id": "b30949e8"
+          },
+          {
+
+            "content": [
+              "Is this seat taken?",
+              "No, it’s free.",
+              "Great! I thought I was going to have to stand on one leg."
+            ],
+            "id": "421eeed3"
           },
           {
 
             "content": [
               "You're late again. Traffic?",
               "No, my bed was holding me hostage.",
-              "That's a serious crime. Get some coffee and get to work."
+              "Thats a serious crime."
             ],
-            "id": "b2dfc598"
-          },
-          {
-
-            "content": [
-              "It's freezing outside today!",
-              "Tell me about it. My coffee turned into an ice cream in two minutes.",
-              "At least you don't need to buy a fridge."
-            ],
-            "id": "cb8d9df4"
-          },
-          {
-
-            "content": [
-              "My computer won't turn on. Help!",
-              "Have you tried turning it off and on again?",
-              "Yes, three times. I even asked it nicely to work.",
-              "Okay, let's try the \"not so nice\" way then."
-            ],
-            "id": "10df8bc4"
-          },
-          {
-
-            "content": [
-              "Hey, are you busy this Saturday?",
-              "That depends. Does it involve moving heavy furniture?",
-              "...Actually, yes. How did you know?",
-              "I have a \"moving furniture\" radar. It's a curse."
-            ],
-            "id": "691dbcfe"
-          },
-          {
-
-            "content": [
-              "I have a bit of a sore throat.",
-              "Do you have a fever too?",
-              "No, just the throat. It feels like I swallowed a cactus.",
-              "Try these lozenges. They taste like cherry, not desert."
-            ],
-            "id": "941abe41"
+            "id": "d4eb495f"
           },
           {
 
@@ -388,7 +508,7 @@
               "That's a classic answer. Anything real?",
               "Okay, I can't start my brain without three cups of coffee."
             ],
-            "id": "f743f8ec"
+            "id": "21b7b956"
           },
           {
 
@@ -398,17 +518,17 @@
               "Do they play well?",
               "Well enough that you won't need a TV."
             ],
-            "id": "9aed95b3"
+            "id": "815d6581"
           },
           {
 
             "content": [
-              "Your dog is so well-behaved!",
-              "Only when he's sleeping.",
-              "Does he know any tricks?",
-              "He can make a whole steak disappear in three seconds."
+              "I think I left my umbrella here last Tuesday.",
+              "Can you describe it?",
+              "Black. Foldable. Has a tiny duck on the handle.",
+              "We actually have three of those. Which duck?"
             ],
-            "id": "7b09bcbf"
+            "id": "4c4a67db"
           }
         ]
       }
@@ -421,7 +541,15 @@
         "sentence_builder": [
           {
             "id": "fd89a65f",
-            "content": ["I would have called", "but I lost", "my charger again."]
+            "content": ["I'm going to make him", "an offer he can't refuse."]
+          },
+          {
+            "id": "dpa8cn0w",
+            "content": ["It was the best of times,", "it was the worst of times."]
+          },
+          {
+            "id": "yu633apc",
+            "content": ["You either die a hero,", "or you live long enough", "to see yourself become the villain."]
           },
           {
             "id": "6ea37d15",
@@ -438,6 +566,16 @@
             "id": "b3d7ea01",
             "group_name": "Doctor's Visit",
             "content": ["prescription", "waiting room", "blood test", "follow-up appointment"]
+          },
+          {
+            "id": "cbd5aef2",
+            "group_name": "weather",
+            "content": [
+              "rainy",
+              "drizzle",
+              "blizzard",
+              "hail"
+            ]
           }
         ],
         "dialogue_chain": [
@@ -447,7 +585,7 @@
               "Can I borrow this book? The cover looks cool.",
               "Sure, but don't read the last page first.",
               "Why? Does the hero die?",
-              "No, but you'll ruin the mystery. Just trust me."
+              "No, but you'll ruin the mystery."
             ]
           },
           {
@@ -470,7 +608,7 @@
               "Boiling",
               "Scorching"
             ],
-            "hash": "e31996b7"
+            "id": "e31996b7"
           },
           {
 
@@ -480,7 +618,7 @@
               "Often",
               "Always"
             ],
-            "hash": "fa8e2023"
+            "id": "fa8e2023"
           },
           {
 
@@ -490,7 +628,7 @@
               "Large",
               "Gigantic"
             ],
-            "hash": "2c0af89f"
+            "id": "2c0af89f"
           },
           {
 
@@ -500,7 +638,7 @@
               "Challenging",
               "Impossible"
             ],
-            "hash": "51987146"
+            "id": "51987146"
           },
           {
 
@@ -510,7 +648,7 @@
               "Downpour",
               "Flash flood"
             ],
-            "hash": "1669e19f"
+            "id": "1669e19f"
           },
           {
 
@@ -519,7 +657,7 @@
               "Probably",
               "Definitely"
             ],
-            "hash": "69c91de7"
+            "id": "69c91de7"
           },
           {
 
@@ -528,7 +666,7 @@
               "Upset",
               "Furious"
             ],
-            "hash": "0b226fb4"
+            "id": "0b226fb4"
           },
           {
 
@@ -537,7 +675,7 @@
               "Chilly",
               "Freezing"
             ],
-            "hash": "b80a7032"
+            "id": "b80a7032"
           },
           {
 
@@ -547,7 +685,7 @@
               "Run",
               "Sprint"
             ],
-            "hash": "6e95fe4e"
+            "id": "6e95fe4e"
           },
           {
 
@@ -556,7 +694,7 @@
               "Hungry",
               "Starving"
             ],
-            "hash": "a9175603"
+            "id": "a9175603"
           },
           {
 
@@ -566,7 +704,7 @@
               "I'm sure",
               "No doubt"
             ],
-            "hash": "c38ae7a7"
+            "id": "c38ae7a7"
           },
           {
 
@@ -576,7 +714,7 @@
               "Rich",
               "Filthy rich"
             ],
-            "hash": "184f1e60"
+            "id": "184f1e60"
           },
           {
 
@@ -586,7 +724,7 @@
               "Clean",
               "Spotless"
             ],
-            "hash": "49ce94bf"
+            "id": "49ce94bf"
           },
           {
 
@@ -596,7 +734,7 @@
               "Bright",
               "Blinding"
             ],
-            "hash": "3cbfaf67"
+            "id": "3cbfaf67"
           },
           {
 
@@ -606,7 +744,7 @@
               "Deep",
               "Bottomless"
             ],
-            "hash": "2cefffeb"
+            "id": "2cefffeb"
           },
           {
 
@@ -616,7 +754,7 @@
               "Loud",
               "Deafening"
             ],
-            "hash": "7023fad7"
+            "id": "7023fad7"
           },
           {
 
@@ -626,7 +764,7 @@
               "Old",
               "Ancient"
             ],
-            "hash": "bfa759f4"
+            "id": "bfa759f4"
           },
           {
 
@@ -636,7 +774,7 @@
               "Painful",
               "Agonizing"
             ],
-            "hash": "427fa482"
+            "id": "427fa482"
           }
         ]
       }

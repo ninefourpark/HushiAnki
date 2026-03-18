@@ -172,6 +172,14 @@ details.xp-collapse .drawer-item-arrow {
     html, body {
         overflow: hidden;
     }
+
+    /* Header 固定在顶部，防止被scroll推走 */
+    header {
+        position: sticky;
+        top: 0;
+        z-index: 300;
+        flex-shrink: 0;
+    }
  
     /* --- Header --- */
     /* 桌面菜单栏隐藏 */
@@ -222,8 +230,23 @@ details.xp-collapse .drawer-item-arrow {
         min-height: 130px;
     }
 
+    /* 拖拽时，源卡/随行卡高度固定，避免 :last-child 触发高度跳变 */
+    .is-dragging-source {
+        height: 130px !important;
+        min-height: 130px !important;
+        max-height: 130px !important;
+        overflow: hidden !important;
+    }
+
+    /* 胜利弹窗在手机上需要高 z-index 且居中 */
+    #win-overlay {
+        z-index: 99998 !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
     .card-text {
-        font-size: 14px;
+        font-size: 12px;
         padding-right: 18px;
     }
 
@@ -232,14 +255,14 @@ details.xp-collapse .drawer-item-arrow {
         top: 26px;
         right: 3px;
     }
-    .sortable-ghost {
-        height: 130px !important;
-    }
     /* 花色图标缩小 */
+    .drag-ghost-container.show-hints .card::after,
     .board.show-hints .card::after {
-        font-size: 13px;
+        font-size: 12px;
         top: 5px;
-        right: 6px;
+        right: 5px;
+        width: 1.3em;  
+        height: 1.3em;
     }
  
     /* --- 发牌堆：缩小，右下角，在俺寻思上方 --- */
