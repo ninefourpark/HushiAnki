@@ -237,18 +237,24 @@ async function initGame(deck_id) {
     changetothatGroup = [...reviewSlice, ...newSlice];
 
     if (changetothatGroup.length === 0) {
-        // 没有可玩的牌：不覆盖 activeGroups，不切换词库，棋盘保持原状
-        // 所有牌都在冷却（learningPool）或已毕业，今天的学习已完成
-        // 不写入 currentDeckId / last_deck_id，保持当前词库不变
+
+        // 切换到目标词库（更新标题、currentDeckId），但棋盘清空
+        // 这样导出功能拿到的是目标词库，用户也知道自己在看哪个词库
+        currentDeckId = deck_id;
+        localStorage.setItem('last_deck_id', deck_id);
+        document.getElementById('level-title').innerText = deck.deck_metadata.title;
+        const lang0 = (deck.deck_metadata.language || ['en'])[0];
+        document.querySelector('.board').dataset.deckLang = lang0;
+        // 清空棋盘和activeGroups，因为今天没有可打的牌
+        activeGroups = [];
+        document.querySelectorAll('.sortable-list').forEach(el => el.innerHTML = '');
+        updateDeckSelectorUI();
+
+        // 弹窗放在最后，避免 alert 阻塞 DOM 更新
         if (learningPool.length > 0) {
             alert('今日牌局已结束，明日君再来。——还未尽兴？去菜单栏看看其他词库吧！');
         } else {
             alert('本词库已通关。所有单词已达到最高等级，是时候看看其他词库了！');
-        }
-        if (!currentDeckId) {
-            const reg = getRegistry();
-            const fallback = reg.find(r => r.deck_id !== deck_id);
-            if (fallback) initGame(fallback.deck_id);
         }
         return;
     }
